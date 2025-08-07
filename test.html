@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pengaturan User</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Container background simulating blurred transparent effect but the transparent parts are not part of an image */
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(180deg, #580a2c 0%, #2b0712 100%);
+        color: #eee;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .app-container {
+        width: 320px;
+        height: 100vh;
+        background: rgba(18, 7, 14, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 0 40px rgb(255 255 255 / 0.05);
+        display: flex;
+        flex-direction: column;
+        padding: 20px 16px;
+        overflow-y: auto;
+      }
+      /* Search bar container */
+      .search-bar {
+        background: rgba(255 255 255 / 0.15);
+        border-radius: 100px;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+        margin-bottom: 10px;
+        color: #f0e9e9;
+        font-weight: 400;
+      }
+      .search-bar input {
+        background: transparent;
+        border: none;
+        flex-grow: 1;
+        padding: 6px 0;
+        color: #eee;
+        font-size: 14px;
+        font-weight: 400;
+        outline-offset: -2px;
+        font-family: inherit;
+      }
+      .search-bar input::placeholder {
+        color: #d3b6bdcc;
+        font-style: italic;
+      }
+      .search-bar svg {
+        flex-shrink: 0;
+        stroke: #ddd;
+        stroke-width: 1.8;
+      }
+      .top-right-icons {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .icon-button {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255 255 255 / 0.15);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease;
+      }
+      .icon-button:hover {
+        background: rgba(255 255 255 / 0.3);
+      }
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #f0e9e9;
+        cursor: pointer;
+        transition: border-color 0.3s ease;
+      }
+      .avatar:hover {
+        border-color: #d3b6bdcc;
+      }
+      /* Heading for Pengaturan */
+      .section-title {
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-top: 16px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        user-select: none;
+      }
+      .section-icon {
+        width: 28px;
+        height: 28px;
+        background: rgba(255 255 255 / 0.15);
+        border-radius: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #d3b6bdcc;
+        font-weight: 700;
+        font-size: 18px;
+        user-select: none;
+      }
+      /* Each setting box */
+      .settings-box {
+        background: rgba(255 255 255 / 0.2);
+        border-radius: 14px;
+        padding: 12px 16px;
+        margin-bottom: 14px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: inset 0 0 8px rgb(255 255 255 / 0.12);
+      }
+      .settings-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        user-select: none;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 1.2;
+        color: #f0e9e9dd;
+        cursor: pointer;
+        padding: 6px 4px;
+        border-radius: 10px;
+        transition: background-color 0.15s ease;
+      }
+      .settings-row:hover {
+        background: rgba(255 255 255 / 0.1);
+      }
+      .settings-row .label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .settings-row svg {
+        flex-shrink: 0;
+        stroke: #d3b6bdcc;
+        stroke-width: 1.8;
+        width: 18px;
+        height: 18px;
+      }
+      .settings-row .icon-arrow {
+        stroke: #d3b6bdcc;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+      /* To differentiate the icon gear on the left side with white background */
+      .gear-icon-container {
+        width: 34px;
+        height: 34px;
+        background: white;
+        border-radius: 50%;
+        margin: 8px 0 20px 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 8px rgb(255 255 255 / 0.15);
+        cursor: default;
+      }
+      /* Smaller icons on same vertical left next to settings groups */
+      .vertical-icons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-left: 10px;
+        user-select: none;
+      }
+      .vertical-icon {
+        width: 44px;
+        height: 44px;
+        background: rgba(255 255 255 / 0.15);
+        border-radius: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #d3b6bdcc;
+        font-weight: 700;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      class="app-container"
+      role="main"
+      aria-label="Halaman Pengaturan User"
+    >
+      <header class="flex justify-between items-center">
+        <p class="text-sm font-semibold text-white select-text">
+          Halo, <span class="font-bold">NamaUser1</span>
+        </p>
+        <div class="top-right-icons" aria-label="Notifikasi dan Profil">
+          <button class="icon-button" aria-label="Notifikasi">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 01-6 0v-1m6 0H9"
+              />
+            </svg>
+          </button>
+          <img
+            class="avatar"
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ed958394-dcec-44ce-8d68-89addf2d7a6c.png"
+            alt="Avatar pengguna NamaUser1 dengan latar belakang merah gelap"
+            onerror="this.onerror=null;this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0c0cb72b-b8c3-4a55-9108-bea1f9c2fbf0.png';"
+          />
+        </div>
+      </header>
+
+      <form class="search-bar" role="search" aria-label="Pencarian Pengaturan">
+        <svg
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input
+          type="search"
+          placeholder="Mau cari apa nih?"
+          aria-label="Kotak pencarian"
+        />
+      </form>
+
+      <div class="section-title" aria-label="Judul Pengaturan">
+        <div class="section-icon" aria-hidden="true">
+          <svg
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M12 15v2m0 0v2m0-2h4m-4 0H8m12-6v4a2 2 0 01-2 2h-2l-1 1-1-1H8a2 2 0 01-2-2v-4a6 6 0 0112 0z"
+            />
+          </svg>
+        </div>
+        Pengaturan
+      </div>
+
+      <section
+        aria-label="Bookmark Pengaturan"
+        class="settings-box"
+        role="region"
+      >
+        <div
+          class="settings-row"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label="Bookmark Pengaturan"
+        >
+          <div class="label">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 5v14l7-7 7 7V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"
+              />
+            </svg>
+            Bookmark
+          </div>
+          <svg
+            class="icon-arrow"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 18l6-6-6-6"
+            />
+          </svg>
+        </div>
+      </section>
+
+      <section
+        aria-label="Notifikasi dan Bahasa"
+        class="settings-box"
+        role="region"
+      >
+        <div
+          class="settings-row"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label="Notification Pengaturan"
+        >
+          <div class="label">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5"
+              />
+            </svg>
+            Notification
+          </div>
+          <svg
+            class="icon-arrow"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 18l6-6-6-6"
+            />
+          </svg>
+        </div>
+        <div
+          class="settings-row"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label="Language Pengaturan"
+        >
+          <div class="label">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.27 19.33A8 8 0 1015 20"
+              />
+            </svg>
+            Language
+          </div>
+          <svg
+            class="icon-arrow"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 18l6-6-6-6"
+            />
+          </svg>
+        </div>
+      </section>
+
+      <section
+        aria-label="Clear Cache dan Cookies"
+        class="settings-box"
+        role="region"
+      >
+        <div
+          class="settings-row"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label="Clear Cache Pengaturan"
+        >
+          <div class="label">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h5l2-3 2 3h5a2 2 0 012 2v12a2 2 0 01-2 2z"
+              />
+            </svg>
+            Clear Cache
+          </div>
+          <svg
+            class="icon-arrow"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 18l6-6-6-6"
+            />
+          </svg>
+        </div>
+        <div
+          class="settings-row"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label="Clear Cookies Pengaturan"
+        >
+          <div class="label">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M18 8a6 6 0 00-12 0v10a6 6 0 0012 0V8z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12l2 2 4-4"
+              />
+            </svg>
+            Clear Cookies
+          </div>
+          <svg
+            class="icon-arrow"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 18l6-6-6-6"
+            />
+          </svg>
+        </div>
+      </section>
+
+      <section
+        aria-label="Copyright and Privacy Information"
+        class="settings-box"
+        role="region"
+      >
+        <div
+          class="settings-row"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label="Copyright Information"
+        >
+          <div class="label">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9.5 15.75v-7.5l5 3.75-5 3.75z"
+              />
+            </svg>
+            Copyright Information
+          </div>
+          <svg
+            class="icon-arrow"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 18l6-6-6-6"
+            />
+          </svg>
+        </div>
+        <div
+          class="settings-row"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label="Privacy Policy"
+        >
+          <div class="label">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 14c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z"
+              />
+            </svg>
+            Privacy Policy
+          </div>
+          <svg
+            class="icon-arrow"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 18l6-6-6-6"
+            />
+          </svg>
+        </div>
+        <div
+          class="settings-row"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label="Version Information"
+        >
+          <div class="label">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Version Information
+          </div>
+          <svg
+            class="icon-arrow"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 18l6-6-6-6"
+            />
+          </svg>
+        </div>
+      </section>
+
+      <div
+        class="gear-icon-container"
+        aria-hidden="true"
+        title="Ikon Pengaturan"
+      >
+        <svg
+          fill="none"
+          stroke="#6b7280"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.75"
+            d="M10.325 4.317a9.956 9.956 0 011.35 0c.27.059.52.222.69.453l.312.423a1.5 1.5 0 001.536.533l1.344-.397a7.013 7.013 0 012.66.885c.254.164.5.355.736.572l.125.125a1.5 1.5 0 001.414.262l.899-.334a7.015 7.015 0 011.086 2.372l-.343 1.42a1.5 1.5 0 00.614 1.5l.393.297a7.007 7.007 0 01-.07 2.507 1.5 1.5 0 00-.034 1.104l.285 1.126a7.002 7.002 0 01-2.215 1.286 1.5 1.5 0 00-1.053-.096l-1.298.362a1.495 1.495 0 00-1.372-.371l-.065.014a9.962 9.962 0 01-5.073.071c-.74-.193-1.44-.535-2.073-1.005l-.322-.233a1.5 1.5 0 00-.931-.256l-1.298.122a7.016 7.016 0 01-1.042-2.512l.284-1.134a1.5 1.5 0 00-.27-1.473l-.38-.426a7.004 7.004 0 01.378-2.64 1.5 1.5 0 00.066-1.074l-.242-1.067a7.01 7.01 0 012.154-1.318l1.282.27a1.5 1.5 0 001.37-.215l.051-.04z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.75"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
+      </div>
+    </main>
+  </body>
+</html>
