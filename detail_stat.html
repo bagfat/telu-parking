@@ -3,260 +3,1501 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kepadatan Kendaraan - Detail</title>
-    <link rel="stylesheet" href="detail_stat.css" />
+    <title>Kepadatan Kendaraan - Tel-U Parking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Material Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
   </head>
   <body>
-    <div class="container">
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: black;
+        color: white;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        display: flex;
+      }
+
+      .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          #8b1538 0%,
+          #5c0e24 30%,
+          #3d0b18 70%,
+          #2d0710 100%
+        );
+        z-index: -2;
+      }
+
+      .sidebar-container {
+        display: flex;
+        height: 100vh;
+        width: 100px;
+        background: linear-gradient(
+          135deg,
+          #8b1538 0%,
+          #5c0e24 30%,
+          #3d0b18 70%,
+          #2d0710 100%
+        );
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+      }
+
+      .sidebar {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 60px;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        gap: 10px;
+        width: fit-content;
+        height: fit-content;
+        justify-content: center;
+      }
+
+      @media (min-width: 768px) {
+        .sidebar {
+          width: fit-content;
+        }
+      }
+
+      .sidebar-logo {
+        margin-top: 0px;
+        padding: 20px;
+      }
+
+      .sidebar-item {
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      @media (min-width: 768px) {
+        .sidebar-item {
+          width: 66px;
+          height: 66px;
+        }
+      }
+
+      .sidebar-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .sidebar-item.active {
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      .material-symbols-outlined.inactive {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 32px;
+      }
+
+      .material-symbols-outlined.active {
+        font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+        color: rgba(128, 0, 0);
+        font-size: 32px;
+      }
+
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        -webkit-backdrop-filter: blur(12px);
+        overflow: hidden;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+        border-radius: 0 0 10px 10px;
+      }
+
+      @media (min-width: 768px) {
+        .header {
+          padding: 24px 32px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .mobile-logo {
+          display: none;
+        }
+      }
+
+      .greeting {
+        font-size: 24px;
+        font-weight: 400;
+        color: #ffeeee;
+        text-shadow: 0 6px 4px rgba(0, 0, 0, 0.25);
+      }
+
+      @media (min-width: 768px) {
+        .greeting {
+          font-size: 24px;
+        }
+      }
+
+      .username {
+        font-weight: 700;
+        color: #ffeeee;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      @media (min-width: 768px) {
+        .header-right {
+          gap: 16px;
+        }
+      }
+
+      .search-bar {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: rgba(255, 255, 255, 0.75);
+        width: 300px;
+        height: 50px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+      }
+
+      .search-bar .material-symbols-outlined {
+        font-size: 30px;
+      }
+
+      @media (min-width: 768px) {
+        .search-bar {
+          width: 300px;
+          padding: 12px 18px;
+        }
+      }
+
+      .search-bar:focus-within {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .search-bar input {
+        background: transparent;
+        border: none;
+        flex-grow: 1;
+        color: white;
+        font-size: 18px;
+        outline: none;
+        font-family: inherit;
+      }
+
+      .search-bar input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+        font-style: italic;
+      }
+
+      input[type="search"]::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.75);
+        cursor: pointer;
+
+        mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e")
+          center/contain no-repeat;
+        -webkit-mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e")
+          center/contain no-repeat;
+      }
+
+      #notifications-icon {
+        font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+        color: white;
+        font-size: 36px;
+        text-shadow: 0 6px 4px rgba(0, 0, 0, 0.25);
+        padding: 10px;
+      }
+
+      .icon-button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      @media (min-width: 768px) {
+        .icon-button {
+          width: 50px;
+          height: 50px;
+        }
+      }
+
+      .icon-button:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1.05);
+      }
+
+      .avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      @media (min-width: 768px) {
+        .avatar {
+          width: 60px;
+          height: 60px;
+        }
+      }
+
+      .avatar:hover {
+        transform: scale(1.05);
+      }
+
+      .content-area {
+        flex: 1;
+        padding: 20px 16px;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      @media (min-width: 768px) {
+        .content-area {
+          padding: 20px;
+        }
+      }
+
+      .page-title {
+        font-size: 30px;
+        font-weight: 700;
+        color: #ffeeee;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 32px;
+        flex-shrink: 0;
+      }
+
+      .page-title .material-symbols-outlined {
+        font-size: 30px;
+      }
+
+      @media (min-width: 768px) {
+        .page-title {
+          font-size: 30px;
+          margin-bottom: 32px;
+        }
+      }
+
+      /* Time Filter */
+      .time-filter {
+        display: flex;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 25px;
+        padding: 4px;
+        margin-bottom: 30px;
+        backdrop-filter: blur(10px);
+        width: fit-content;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .filter-btn {
+        flex: 1;
+        padding: 10px 20px;
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.7);
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        min-width: 80px;
+        font-family: inherit;
+      }
+
+      .filter-btn.active {
+        background: rgba(255, 255, 255, 0.9);
+        color: #2d0710;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+      }
+
+      .filter-btn:hover:not(.active) {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      /* Dashboard Grid */
+      .dashboard-grid {
+        display: grid;
+        gap: 24px;
+        grid-template-columns: 1fr;
+        margin-bottom: 30px;
+      }
+
+      @media (min-width: 768px) {
+        .dashboard-grid {
+          grid-template-columns: 2fr 1fr;
+          gap: 24px;
+        }
+      }
+
+      /* Gaming Chart Section */
+      .chart-section {
+        background: linear-gradient(
+          145deg,
+          rgba(0, 255, 150, 0.1),
+          rgba(0, 200, 255, 0.05)
+        );
+        border-radius: 20px;
+        padding: 32px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 0 30px rgba(0, 255, 150, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.4);
+        border: 2px solid rgba(0, 255, 150, 0.3);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+      }
+
+      .chart-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          45deg,
+          transparent 30%,
+          rgba(0, 255, 150, 0.05) 50%,
+          transparent 70%
+        );
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .chart-section:hover::before {
+        opacity: 1;
+      }
+
+      .chart-section:hover {
+        background: linear-gradient(
+          145deg,
+          rgba(0, 255, 150, 0.15),
+          rgba(0, 200, 255, 0.08)
+        );
+        transform: translateY(-6px);
+        box-shadow: 0 0 50px rgba(0, 255, 150, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5);
+        border-color: rgba(0, 255, 150, 0.5);
+      }
+
+      .chart-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 24px;
+        color: #00ff96;
+        text-shadow: 0 0 10px rgba(0, 255, 150, 0.5);
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      @media (min-width: 768px) {
+        .chart-title {
+          font-size: 22px;
+        }
+      }
+
+      .chart-container {
+        position: relative;
+        height: 280px;
+        margin-bottom: 20px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        border: 1px solid rgba(0, 255, 150, 0.2);
+        overflow: hidden;
+      }
+
+      @media (min-width: 768px) {
+        .chart-container {
+          height: 320px;
+        }
+      }
+
+      /* Gaming Grid */
+      .chart-grid {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px 50px 20px 20px;
+      }
+
+      .grid-line {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 255, 150, 0.3) 0%,
+          rgba(0, 255, 150, 0.1) 50%,
+          transparent 100%
+        );
+        position: relative;
+        border-radius: 1px;
+        box-shadow: 0 0 5px rgba(0, 255, 150, 0.2);
+      }
+
+      .grid-line:nth-child(even) {
+        background: linear-gradient(
+          90deg,
+          rgba(0, 200, 255, 0.2) 0%,
+          rgba(0, 200, 255, 0.08) 50%,
+          transparent 100%
+        );
+        box-shadow: 0 0 5px rgba(0, 200, 255, 0.15);
+      }
+
+      .grid-label {
+        position: absolute;
+        left: -45px;
+        top: -8px;
+        font-size: 12px;
+        color: #00ff96;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-shadow: 0 0 8px rgba(0, 255, 150, 0.6);
+        font-family: "Courier New", monospace;
+      }
+
+      /* Gaming Chart Line */
+      .chart-line {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        padding: 20px 50px 20px 20px;
+      }
+
+      .line-path {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Gaming Data Points */
+      .data-point {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: radial-gradient(
+          circle,
+          #00ff96 0%,
+          #00cc77 70%,
+          #008855 100%
+        );
+        border-radius: 50%;
+        border: 2px solid #00ff96;
+        box-shadow: 0 0 15px rgba(0, 255, 150, 0.8),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        animation: fadeInPoint 0.5s ease-out forwards;
+        cursor: pointer;
+        z-index: 10;
+      }
+
+      .data-point:hover {
+        transform: translate(-50%, -50%) scale(1.8);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 25px rgba(0, 255, 150, 1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      }
+
+      .data-point::before {
+        content: attr(data-value);
+        position: absolute;
+        bottom: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: #00ff96;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        border: 1px solid rgba(0, 255, 150, 0.5);
+        font-family: "Courier New", monospace;
+      }
+
+      .data-point:hover::before {
+        opacity: 1;
+      }
+
+      /* Gaming Bars Style */
+      .gaming-bars {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        padding: 20px 50px 20px 20px;
+        gap: 8px;
+      }
+
+      .gaming-bar {
+        flex: 1;
+        background: linear-gradient(
+          180deg,
+          #00ff96 0%,
+          #00cc77 50%,
+          #008855 100%
+        );
+        border-radius: 4px 4px 0 0;
+        position: relative;
+        min-height: 5px;
+        box-shadow: 0 0 15px rgba(0, 255, 150, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        border: 1px solid rgba(0, 255, 150, 0.3);
+        border-bottom: none;
+      }
+
+      .gaming-bar:hover {
+        transform: scaleY(1.1);
+        box-shadow: 0 0 25px rgba(0, 255, 150, 0.8),
+          inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        border-color: rgba(0, 255, 150, 0.6);
+      }
+
+      .gaming-bar::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #00ff96;
+        box-shadow: 0 0 10px rgba(0, 255, 150, 0.8);
+        border-radius: 4px 4px 0 0;
+      }
+
+      .gaming-bar::after {
+        content: attr(data-value);
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #00ff96;
+        font-size: 10px;
+        font-weight: 600;
+        text-shadow: 0 0 8px rgba(0, 255, 150, 0.8);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        font-family: "Courier New", monospace;
+      }
+
+      .gaming-bar:hover::after {
+        opacity: 1;
+      }
+
+      /* Modern Month Labels - Gaming Style */
+      .chart-months {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 16px;
+        padding: 0 50px 0 20px;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+
+      .month-label {
+        font-size: 11px;
+        color: #00ff96;
+        font-weight: 600;
+        flex: 1;
+        text-align: center;
+        min-width: 30px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-shadow: 0 0 8px rgba(0, 255, 150, 0.5);
+        font-family: "Courier New", monospace;
+        transition: all 0.3s ease;
+      }
+
+      .month-label:hover {
+        color: #00ccff;
+        text-shadow: 0 0 12px rgba(0, 204, 255, 0.8);
+        transform: scale(1.1);
+      }
+
+      /* Stats Circle - Enhanced */
+      .stats-circle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 32px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+
+      .stats-circle:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+      }
+
+      .circular-progress {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        max-width: 100%;
+        aspect-ratio: 1;
+      }
+
+      @media (min-width: 768px) {
+        .circular-progress {
+          width: 180px;
+          height: 180px;
+        }
+      }
+
+      .progress-ring {
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+      }
+
+      .progress-ring-bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.08);
+        stroke-width: 8;
+      }
+
+      .progress-ring-fill {
+        fill: none;
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke-dasharray 2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .progress-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+
+      .total-count {
+        font-size: 28px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 5px;
+        text-shadow: none;
+        letter-spacing: -0.02em;
+      }
+
+      @media (min-width: 768px) {
+        .total-count {
+          font-size: 32px;
+        }
+      }
+
+      .total-label {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 500;
+        letter-spacing: 0.02em;
+      }
+
+      /* Bottom Grid - Enhanced */
+      .bottom-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin-bottom: 30px;
+      }
+
+      @media (min-width: 768px) {
+        .bottom-grid {
+          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+          gap: 24px;
+        }
+      }
+
+      /* Statistics List - Enhanced */
+      .stats-list {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 24px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #ffeeee;
+        text-shadow: none;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+
+      .stats-list:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+      }
+
+      .stats-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        letter-spacing: -0.01em;
+      }
+
+      @media (min-width: 768px) {
+        .stats-title {
+          font-size: 20px;
+        }
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 15px;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .info-row:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
+      .info-label {
+        color: rgba(255, 255, 255, 0.7);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
+      .info-value {
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .available {
+        color: #34d399;
+      }
+
+      .almost-full {
+        color: #fbbf24;
+      }
+
+      .full {
+        color: #f87171;
+      }
+
+      /* System Status - Enhanced */
+      .system-status {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 24px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #ffeeee;
+        text-shadow: none;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+
+      .system-status:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+      }
+
+      .status-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        letter-spacing: -0.01em;
+      }
+
+      @media (min-width: 768px) {
+        .status-title {
+          font-size: 20px;
+        }
+      }
+
+      .status-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 15px;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .status-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
+      .status-text {
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
+      .status-value {
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      /* Back Button - Enhanced */
+      .back-button-container {
+        padding: 0 16px 20px;
+      }
+
+      @media (min-width: 768px) {
+        .back-button-container {
+          padding: 0 20px 30px;
+        }
+      }
+
+      .back-button {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 16px;
+        border-radius: 24px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        font-family: inherit;
+        letter-spacing: -0.01em;
+      }
+
+      .back-button:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .back-button .material-symbols-outlined {
+        font-size: 20px;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 767px) {
+        body {
+          flex-direction: column;
+          padding-bottom: 90px;
+        }
+
+        .sidebar-container {
+          width: 100%;
+          height: 90px;
+          flex-direction: row;
+          order: 2;
+          bottom: 0px;
+          z-index: 100;
+          position: fixed;
+          justify-content: center;
+          border-radius: 10px 10px 0 0;
+        }
+
+        .sidebar {
+          flex-direction: row;
+          margin-top: 0;
+        }
+
+        .sidebar-item {
+          margin-right: 16px;
+        }
+
+        .sidebar-logo {
+          display: none;
+        }
+
+        .main-content {
+          order: 1;
+          height: calc(100vh - 70px);
+        }
+
+        .header {
+          flex-wrap: wrap;
+          justify-content: center;
+          text-align: center;
+          padding: 14px 0;
+        }
+
+        .mobile-logo {
+          position: absolute;
+          left: 16px;
+          top: 40px;
+          transform: translateY(-50%);
+          height: 40px;
+          z-index: 10;
+        }
+
+        .mobile-logo-img {
+          height: 100%;
+          width: auto;
+          object-fit: contain;
+        }
+
+        .header-right {
+          margin-top: 12px;
+          justify-content: center;
+          text-align: center;
+          width: 100%;
+          padding: 0px 12px;
+        }
+
+        .search-bar {
+          min-width: 150px;
+          width: 100%;
+        }
+
+        .time-filter {
+          width: 100%;
+          margin-left: 0;
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+
+        .filter-btn {
+          padding: 8px 12px;
+          font-size: 13px;
+          min-width: 70px;
+        }
+
+        .chart-container {
+          height: 220px;
+        }
+
+        .circular-progress {
+          width: 120px;
+          height: 120px;
+        }
+
+        .total-count {
+          font-size: 24px;
+        }
+
+        .chart-section {
+          padding: 20px;
+        }
+
+        .stats-circle {
+          padding: 24px;
+        }
+
+        .stats-list,
+        .system-status {
+          padding: 20px;
+        }
+
+        .stats-title,
+        .status-title {
+          font-size: 16px;
+          margin-bottom: 15px;
+        }
+
+        .grid-label {
+          left: -35px;
+          font-size: 10px;
+        }
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @keyframes fadeInPoint {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      @keyframes drawLine {
+        from {
+          stroke-dasharray: 0 1000;
+        }
+        to {
+          stroke-dasharray: 500 1000;
+        }
+      }
+
+      .animated-line {
+        animation: drawLine 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+
+      /* Pulse Animation for Data Points */
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 2px 8px rgba(96, 165, 250, 0.4);
+        }
+        50% {
+          box-shadow: 0 4px 16px rgba(96, 165, 250, 0.8);
+        }
+      }
+
+      .data-point.active {
+        animation: pulse 2s infinite;
+      }
+    </style>
+
+    <div class="background"></div>
+    <div class="sidebar-container">
+      <div class="sidebar-logo" title="Logo TelU">
+        <img
+          src="./assets/logo-telu-parking.png"
+          alt="tel-u-parking-logo"
+          onclick="goToHome()"
+        />
+      </div>
+      <nav class="sidebar">
+        <div class="sidebar-item" title="Home Page" onclick="goToHome()">
+          <span class="material-symbols-outlined inactive">cottage</span>
+        </div>
+        <div
+          class="sidebar-item active"
+          title="Statistics"
+          onclick="goToStatistics()"
+        >
+          <span class="material-symbols-outlined active">
+            bar_chart_4_bars
+          </span>
+        </div>
+        <div class="sidebar-item" title="Settings" onclick="goToSettings()">
+          <span class="material-symbols-outlined inactive">settings</span>
+        </div>
+      </nav>
+    </div>
+
+    <main class="main-content">
       <!-- Header -->
-      <div class="header">
-        <div class="greeting">Halo, NamaUser1</div>
+      <header class="header">
+        <div class="mobile-logo">
+          <img
+            src="./assets/logo-telu-parking.png"
+            alt="Tel-U Parking Logo"
+            class="mobile-logo-img"
+          />
+        </div>
+        <div class="greeting">
+          Halo, <span class="username">Bagus Fatkhurrohman</span>
+        </div>
         <div class="header-right">
-          <div class="search-bar">
-            <svg
-              width="16"
-              height="16"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <circle cx="11" cy="11" r="7" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input type="search" placeholder="Mau cari apa nih?" />
-          </div>
-          <button class="notification-btn">
-            <svg
-              width="18"
-              height="18"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 01-6 0v-1m6 0H9"
-              />
-            </svg>
+          <form class="search-bar" role="search" onsubmit="handleSearch(event)">
+            <span class="material-symbols-outlined">search</span>
+            <input
+              type="search"
+              placeholder="Mau cari apa nih?"
+              id="searchInput"
+            />
+          </form>
+          <button
+            class="icon-button"
+            title="Notifikasi"
+            onclick="showNotifications()"
+          >
+            <span class="material-symbols-outlined" id="notifications-icon">
+              notifications
+            </span>
           </button>
           <img
             class="avatar"
-            src="https://ui-avatars.com/api/?name=User&background=ef4444&color=fff"
-            alt="Avatar"
+            src="./assets/foto-2023-bagus-fatkhurrohman 2.png"
+            alt="Avatar User"
+            onclick="showProfile()"
           />
         </div>
-      </div>
+      </header>
 
-      <!-- Main Content -->
-      <div class="main-content">
-        <div class="content-grid">
-          <!-- Page Title -->
-          <div class="page-title fade-in">
-            <div class="title-icon">
-              <svg
-                width="20"
-                height="20"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                />
-              </svg>
-            </div>
-            <h1>Kepadatan Kendaraan</h1>
-          </div>
+      <!-- Content Area -->
+      <div class="content-area" id="contentArea">
+        <h1 class="page-title" id="pageTitle">
+          <span class="material-symbols-outlined">bar_chart_4_bars</span
+          >Kepadatan Kendaraan
+        </h1>
 
-          <!-- Time Filter -->
-          <div class="time-filter fade-in">
-            <button class="filter-btn" onclick="setTimeFilter('harian')">
-              harian
-            </button>
-            <button
-              class="filter-btn active"
-              onclick="setTimeFilter('mingguan')"
-            >
-              mingguan
-            </button>
-            <button class="filter-btn" onclick="setTimeFilter('bulanan')">
-              bulanan
-            </button>
-          </div>
+        <!-- Time Filter -->
+        <div class="time-filter fade-in">
+          <button class="filter-btn" onclick="setTimeFilter('harian')">
+            Harian
+          </button>
+          <button class="filter-btn active" onclick="setTimeFilter('mingguan')">
+            Mingguan
+          </button>
+          <button class="filter-btn" onclick="setTimeFilter('bulanan')">
+            Bulanan
+          </button>
+        </div>
 
-          <!-- Dashboard Grid -->
-          <div class="dashboard-grid fade-in">
-            <!-- Chart Section -->
-            <div class="chart-section">
-              <div class="chart-container">
-                <div class="chart-grid">
-                  <div class="grid-line">
-                    <span class="grid-label">300</span>
-                  </div>
-                  <div class="grid-line">
-                    <span class="grid-label">250</span>
-                  </div>
-                  <div class="grid-line">
-                    <span class="grid-label">200</span>
-                  </div>
-                  <div class="grid-line">
-                    <span class="grid-label">150</span>
-                  </div>
-                  <div class="grid-line">
-                    <span class="grid-label">100</span>
-                  </div>
-                  <div class="grid-line">
-                    <span class="grid-label">50</span>
-                  </div>
-                  <div class="grid-line"><span class="grid-label">0</span></div>
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid fade-in">
+          <!-- Chart Section -->
+          <div class="chart-section">
+            <div class="chart-title">Grafik Kepadatan</div>
+            <div class="chart-container">
+              <div class="chart-grid">
+                <div class="grid-line">
+                  <span class="grid-label">300</span>
                 </div>
-                <div class="chart-line">
-                  <svg class="line-path" viewBox="0 0 300 160">
+                <div class="grid-line">
+                  <span class="grid-label">250</span>
+                </div>
+                <div class="grid-line">
+                  <span class="grid-label">200</span>
+                </div>
+                <div class="grid-line">
+                  <span class="grid-label">150</span>
+                </div>
+                <div class="grid-line">
+                  <span class="grid-label">100</span>
+                </div>
+                <div class="grid-line">
+                  <span class="grid-label">50</span>
+                </div>
+                <div class="grid-line"><span class="grid-label">0</span></div>
+              </div>
+              <div class="chart-line">
+                <svg class="line-path" viewBox="0 0 300 200">
+                  <!-- Gaming Gradient Definitions -->
+                  <defs>
+                    <!-- Neon Line Gradient -->
+                    <linearGradient
+                      id="neonLineGradient"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop
+                        offset="0%"
+                        style="stop-color: #00ff96; stop-opacity: 1"
+                      />
+                      <stop
+                        offset="30%"
+                        style="stop-color: #00ccff; stop-opacity: 1"
+                      />
+                      <stop
+                        offset="70%"
+                        style="stop-color: #9945ff; stop-opacity: 1"
+                      />
+                      <stop
+                        offset="100%"
+                        style="stop-color: #ff0080; stop-opacity: 1"
+                      />
+                    </linearGradient>
+
+                    <!-- Area Gradient -->
+                    <linearGradient
+                      id="neonAreaGradient"
+                      x1="0%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
+                      <stop
+                        offset="0%"
+                        style="stop-color: #00ff96; stop-opacity: 0.4"
+                      />
+                      <stop
+                        offset="50%"
+                        style="stop-color: #00ccff; stop-opacity: 0.2"
+                      />
+                      <stop
+                        offset="100%"
+                        style="stop-color: #9945ff; stop-opacity: 0"
+                      />
+                    </linearGradient>
+
+                    <!-- Glow Filter -->
+                    <filter id="neonGlow">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  <!-- Gaming Grid Pattern -->
+                  <pattern
+                    id="gridPattern"
+                    patternUnits="userSpaceOnUse"
+                    width="30"
+                    height="20"
+                  >
                     <path
-                      id="chart-path"
-                      d=""
-                      stroke="#a855f7"
-                      stroke-width="3"
+                      d="M 30 0 L 0 0 0 20"
                       fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      stroke="rgba(0, 255, 150, 0.1)"
+                      stroke-width="0.5"
                     />
-                  </svg>
-                </div>
-              </div>
-              <div class="chart-months">
-                <span class="month-label">Jan</span>
-                <span class="month-label">Feb</span>
-                <span class="month-label">Mar</span>
-                <span class="month-label">Apr</span>
-                <span class="month-label">May</span>
-              </div>
-            </div>
+                  </pattern>
+                  <rect
+                    width="100%"
+                    height="100%"
+                    fill="url(#gridPattern)"
+                    opacity="0.3"
+                  />
 
-            <!-- Circular Progress -->
-            <div class="stats-circle">
-              <div class="circular-progress">
-                <svg class="progress-ring">
-                  <circle class="progress-ring-bg" cx="50%" cy="50%" r="85" />
-                  <circle
-                    id="progress-main"
-                    class="progress-ring-fill"
-                    cx="50%"
-                    cy="50%"
-                    r="85"
-                    stroke="#3b82f6"
-                    stroke-dasharray="0 535"
+                  <!-- Area under the curve -->
+                  <path
+                    id="area-path"
+                    d=""
+                    fill="url(#neonAreaGradient)"
+                    opacity="0"
+                  />
+
+                  <!-- Main gaming line with glow -->
+                  <path
+                    id="chart-path"
+                    d=""
+                    stroke="url(#neonLineGradient)"
+                    stroke-width="4"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    filter="url(#neonGlow)"
                   />
                 </svg>
-                <div class="progress-center">
-                  <div class="total-count" id="total-vehicles">3423</div>
-                  <div class="total-label">Total Motor</div>
-                </div>
+
+                <!-- Gaming Bars Container -->
+                <div
+                  id="gaming-bars-container"
+                  class="gaming-bars"
+                  style="display: none"
+                ></div>
+
+                <!-- Data Points Container -->
+                <div id="data-points-container"></div>
               </div>
+            </div>
+            <div class="chart-months">
+              <span class="month-label">W1</span>
+              <span class="month-label">W2</span>
+              <span class="month-label">W3</span>
+              <span class="month-label">W4</span>
+              <span class="month-label">W5</span>
+              <span class="month-label">W6</span>
+              <span class="month-label">W7</span>
             </div>
           </div>
 
-          <!-- Bottom Grid -->
-          <div class="bottom-grid fade-in">
-            <!-- Statistics List -->
-            <div class="stats-list">
-              <div class="stats-title">
-                <svg
-                  width="18"
-                  height="18"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-                Statistik Kendaraan
-              </div>
-              <div class="stat-item">
-                <div class="stat-dot dot-blue"></div>
-                <div class="stat-text">Total Kendaraan: 3423</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-dot dot-green"></div>
-                <div class="stat-text">Hari Terbaik: 14 Juni</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-dot dot-yellow"></div>
-                <div class="stat-text">Rata2/Hari: 245</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-dot dot-red"></div>
-                <div class="stat-text">Rata2 Okupansi: 75%</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-dot dot-green"></div>
-                <div class="stat-text">Slot Max: 323</div>
-              </div>
-            </div>
-
-            <!-- System Status -->
-            <div class="system-status">
-              <div class="status-title">
-                <svg
-                  width="18"
-                  height="18"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                Status Sistem
-              </div>
-              <div class="status-item">
-                <div class="status-indicator status-active"></div>
-                <div class="status-text">Kamera Aktif: 23 hari</div>
-              </div>
-              <div class="status-item">
-                <div class="status-indicator status-active"></div>
-                <div class="status-text">Waktu Mati: 5 jam</div>
+          <!-- Circular Progress -->
+          <div class="stats-circle">
+            <div class="circular-progress">
+              <svg class="progress-ring">
+                <circle class="progress-ring-bg" cx="50%" cy="50%" r="85" />
+                <circle
+                  id="progress-main"
+                  class="progress-ring-fill"
+                  cx="50%"
+                  cy="50%"
+                  r="85"
+                  stroke="url(#progressGradient)"
+                  stroke-dasharray="0 535"
+                />
+                <defs>
+                  <linearGradient
+                    id="progressGradient"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop
+                      offset="0%"
+                      style="stop-color: #3b82f6; stop-opacity: 1"
+                    />
+                    <stop
+                      offset="100%"
+                      style="stop-color: #8b5cf6; stop-opacity: 1"
+                    />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="progress-center">
+                <div class="total-count" id="total-vehicles">3423</div>
+                <div class="total-label">Total Motor</div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Back Button -->
-      <div class="back-button-container">
-        <button class="back-button" onclick="goBack()">
-          <svg
-            width="20"
-            height="20"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Kembali
-        </button>
+        <!-- Bottom Grid -->
+        <div class="bottom-grid fade-in">
+          <!-- Statistics List -->
+          <div class="stats-list">
+            <div class="stats-title">
+              <span class="material-symbols-outlined">analytics</span>
+              Statistik Kendaraan
+            </div>
+            <div class="info-row">
+              <div class="info-label">Total Kendaraan</div>
+              <div class="info-value available">3423</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Hari Terbaik</div>
+              <div class="info-value available">14 Juni</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Rata-rata/Hari</div>
+              <div class="info-value almost-full">245</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Rata-rata Okupansi</div>
+              <div class="info-value full">75%</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Slot Maximum</div>
+              <div class="info-value available">323</div>
+            </div>
+          </div>
+
+          <!-- System Status -->
+          <div class="system-status">
+            <div class="status-title">
+              <span class="material-symbols-outlined">check_circle</span>
+              Status Sistem
+            </div>
+            <div class="status-item">
+              <div class="status-text">Kamera Aktif</div>
+              <div class="status-value available">23 hari</div>
+            </div>
+            <div class="status-item">
+              <div class="status-text">Waktu Mati</div>
+              <div class="status-value full">5 jam</div>
+            </div>
+            <div class="status-item">
+              <div class="status-text">Akurasi Deteksi</div>
+              <div class="status-value available">98.5%</div>
+            </div>
+            <div class="status-item">
+              <div class="status-text">Update Terakhir</div>
+              <div class="status-value almost-full">2 menit lalu</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="back-button-container">
+          <button class="back-button" onclick="goBack()">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Kembali
+          </button>
+        </div>
       </div>
-    </div>
+    </main>
 
     <script>
       // Chart data
@@ -270,35 +1511,140 @@
 
       function drawChart(data) {
         const svg = document.getElementById("chart-path");
+        const areaPath = document.getElementById("area-path");
+        const pointsContainer = document.getElementById(
+          "data-points-container"
+        );
+        const barsContainer = document.getElementById("gaming-bars-container");
+
+        // Clear existing elements
+        pointsContainer.innerHTML = "";
+        barsContainer.innerHTML = "";
+
         const maxValue = Math.max(...data);
         const width = 300;
-        const height = 160;
-        const padding = 20;
+        const height = 200;
+        const padding = 40;
         const stepX = (width - padding * 2) / (data.length - 1);
 
         let pathData = "";
+        let areaData = "";
+        const points = [];
+
+        // Create gaming bars
+        data.forEach((value, index) => {
+          const barHeight = (value / maxValue) * (height - padding * 2);
+          const bar = document.createElement("div");
+          bar.className = "gaming-bar";
+          bar.style.height = "0px";
+          bar.style.animationDelay = `${index * 0.1}s`;
+          bar.setAttribute("data-value", value);
+
+          // Animate bar height
+          setTimeout(() => {
+            bar.style.transition = "height 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+            bar.style.height = `${barHeight}px`;
+          }, 800 + index * 100);
+
+          barsContainer.appendChild(bar);
+        });
+
         data.forEach((value, index) => {
           const x = padding + index * stepX;
           const y =
             height - padding - (value / maxValue) * (height - padding * 2);
 
+          points.push({ x, y, value });
+
           if (index === 0) {
             pathData += `M ${x} ${y}`;
+            areaData += `M ${x} ${height - padding}`;
+            areaData += ` L ${x} ${y}`;
           } else {
             pathData += ` L ${x} ${y}`;
+            areaData += ` L ${x} ${y}`;
           }
         });
 
-        svg.setAttribute("d", pathData);
-        svg.style.strokeDasharray = svg.getTotalLength();
-        svg.style.strokeDashoffset = svg.getTotalLength();
+        // Close the area path
+        areaData += ` L ${points[points.length - 1].x} ${height - padding} Z`;
 
-        // Animate drawing
+        // Set paths
+        svg.setAttribute("d", pathData);
+        areaPath.setAttribute("d", areaData);
+
+        // Gaming-style line animation
+        const pathLength = svg.getTotalLength();
+        svg.style.strokeDasharray = pathLength;
+        svg.style.strokeDashoffset = pathLength;
+
         setTimeout(() => {
-          svg.style.transition = "stroke-dashoffset 2s ease-in-out";
+          svg.style.transition =
+            "stroke-dashoffset 3s cubic-bezier(0.4, 0, 0.2, 1)";
           svg.style.strokeDashoffset = 0;
-        }, 500);
+
+          // Animate area with electric effect
+          setTimeout(() => {
+            areaPath.style.transition = "opacity 1.5s ease-out";
+            areaPath.style.opacity = 1;
+          }, 1500);
+        }, 400);
+
+        // Create gaming data points with neon effect
+        points.forEach((point, index) => {
+          setTimeout(() => {
+            const dataPoint = document.createElement("div");
+            dataPoint.className = "data-point";
+            dataPoint.style.left = `${(point.x / width) * 100}%`;
+            dataPoint.style.top = `${(point.y / height) * 100}%`;
+            dataPoint.setAttribute("data-value", `${point.value} units`);
+
+            // Add random pulsing for gaming effect
+            setTimeout(() => {
+              if (Math.random() > 0.5) {
+                dataPoint.classList.add("active");
+              }
+            }, 2000 + Math.random() * 3000);
+
+            pointsContainer.appendChild(dataPoint);
+          }, 2000 + index * 300);
+        });
       }
+
+      // Toggle between line and bar chart
+      let chartStyle = "line"; // 'line' or 'bars'
+
+      function toggleChartStyle() {
+        const lineContainer =
+          document.querySelector(".line-path").parentElement;
+        const barsContainer = document.getElementById("gaming-bars-container");
+        const pointsContainer = document.getElementById(
+          "data-points-container"
+        );
+
+        if (chartStyle === "line") {
+          // Switch to bars
+          lineContainer.style.display = "none";
+          pointsContainer.style.display = "none";
+          barsContainer.style.display = "flex";
+          chartStyle = "bars";
+        } else {
+          // Switch to line
+          lineContainer.style.display = "block";
+          pointsContainer.style.display = "block";
+          barsContainer.style.display = "none";
+          chartStyle = "line";
+          drawChart(chartData[currentFilter]);
+        }
+      }
+
+      // Add chart style toggle to chart title
+      document.addEventListener("DOMContentLoaded", function () {
+        const chartTitle = document.querySelector(".chart-title");
+        chartTitle.style.cursor = "pointer";
+        chartTitle.addEventListener("click", toggleChartStyle);
+        chartTitle.title = "Click to switch chart style";
+      });
 
       function animateCircularProgress() {
         const circle = document.getElementById("progress-main");
@@ -311,21 +1657,21 @@
 
         let currentCount = 0;
         const targetCount = 3423;
-        const duration = 2000;
+        const duration = 2500;
         const startTime = Date.now();
 
         function updateProgress() {
           const elapsed = Date.now() - startTime;
           const progress = Math.min(elapsed / duration, 1);
 
-          // Easing function
-          const easeOut = 1 - Math.pow(1 - progress, 3);
+          // Enhanced easing function
+          const easeOut = 1 - Math.pow(1 - progress, 4);
 
-          // Update number
+          // Update number with smooth counting
           currentCount = Math.round(targetCount * easeOut);
           totalVehicles.textContent = currentCount.toLocaleString();
 
-          // Update circle
+          // Update circle with smooth animation
           const currentDash = dashArray * easeOut;
           circle.style.strokeDasharray = `${currentDash} ${circumference}`;
 
@@ -344,46 +1690,108 @@
         });
         event.target.classList.add("active");
 
-        // Update chart
+        // Update chart with smooth transition
         currentFilter = filter;
-        drawChart(chartData[filter]);
+
+        // Add loading state
+        const chartSection = document.querySelector(".chart-section");
+        chartSection.style.opacity = "0.7";
+        chartSection.style.transform = "scale(0.98)";
+
+        setTimeout(() => {
+          drawChart(chartData[filter]);
+          chartSection.style.transition = "all 0.3s ease";
+          chartSection.style.opacity = "1";
+          chartSection.style.transform = "scale(1)";
+        }, 200);
 
         // Update months labels based on filter
         const monthsContainer = document.querySelector(".chart-months");
         if (filter === "harian") {
           monthsContainer.innerHTML = `
-                    <span class="month-label">Sen</span>
-                    <span class="month-label">Sel</span>
-                    <span class="month-label">Rab</span>
-                    <span class="month-label">Kam</span>
-                    <span class="month-label">Jum</span>
-                    <span class="month-label">Sab</span>
-                    <span class="month-label">Min</span>
-                `;
+            <span class="month-label">Sen</span>
+            <span class="month-label">Sel</span>
+            <span class="month-label">Rab</span>
+            <span class="month-label">Kam</span>
+            <span class="month-label">Jum</span>
+            <span class="month-label">Sab</span>
+            <span class="month-label">Min</span>
+          `;
         } else if (filter === "mingguan") {
           monthsContainer.innerHTML = `
-                    <span class="month-label">W1</span>
-                    <span class="month-label">W2</span>
-                    <span class="month-label">W3</span>
-                    <span class="month-label">W4</span>
-                    <span class="month-label">W5</span>
-                    <span class="month-label">W6</span>
-                    <span class="month-label">W7</span>
-                `;
+            <span class="month-label">W1</span>
+            <span class="month-label">W2</span>
+            <span class="month-label">W3</span>
+            <span class="month-label">W4</span>
+            <span class="month-label">W5</span>
+            <span class="month-label">W6</span>
+            <span class="month-label">W7</span>
+          `;
         } else {
           monthsContainer.innerHTML = `
-                    <span class="month-label">Jan</span>
-                    <span class="month-label">Feb</span>
-                    <span class="month-label">Mar</span>
-                    <span class="month-label">Apr</span>
-                    <span class="month-label">May</span>
-                `;
+            <span class="month-label">Jan</span>
+            <span class="month-label">Feb</span>
+            <span class="month-label">Mar</span>
+            <span class="month-label">Apr</span>
+            <span class="month-label">May</span>
+          `;
         }
       }
 
       function goBack() {
-        console.log("Navigating back to main statistics...");
-        // Here you would navigate back to the main statistics page
+        window.location.href = "statistics.php";
+      }
+
+      // Navigation functions (same as home page)
+      function goToStatistics() {
+        window.location.href = "detail_stat.html";
+      }
+
+      function goToSettings() {
+        window.location.href = "settings.php";
+      }
+
+      function goToHome() {
+        window.location.href = "home-page.php";
+      }
+
+      function handleSearch(event) {
+        event.preventDefault();
+        const searchTerm = document.getElementById("searchInput").value;
+        console.log("Searching for:", searchTerm);
+        if (searchTerm.trim()) {
+          window.location.href = `search.html?q=${encodeURIComponent(
+            searchTerm
+          )}`;
+        }
+      }
+
+      function showNotifications() {
+        alert("Menampilkan notifikasi");
+      }
+
+      function showProfile() {
+        alert("Menampilkan profil user");
+      }
+
+      // Update active sidebar state
+      function updateSidebarActive(activeIndex) {
+        const sidebarItems = document.querySelectorAll(".sidebar-item");
+        const icons = document.querySelectorAll(
+          ".sidebar-item .material-symbols-outlined"
+        );
+
+        sidebarItems.forEach((item, index) => {
+          if (index === activeIndex) {
+            item.classList.add("active");
+            icons[index].classList.remove("inactive");
+            icons[index].classList.add("active");
+          } else {
+            item.classList.remove("active");
+            icons[index].classList.remove("active");
+            icons[index].classList.add("inactive");
+          }
+        });
       }
 
       // Initialize
@@ -391,38 +1799,60 @@
         // Add entrance animation delay
         const elements = document.querySelectorAll(".fade-in");
         elements.forEach((el, index) => {
-          el.style.animationDelay = `${index * 0.1}s`;
+          el.style.animationDelay = `${index * 0.15}s`;
         });
 
-        // Initialize chart and progress
+        // Initialize chart and progress with staggered timing
         setTimeout(() => {
           drawChart(chartData[currentFilter]);
+        }, 600);
+
+        setTimeout(() => {
           animateCircularProgress();
-        }, 800);
+        }, 1000);
 
         // Add container entrance animation
-        const container = document.querySelector(".container");
+        const container = document.querySelector(".main-content");
         container.style.opacity = "0";
         container.style.transform = "translateY(20px)";
 
         setTimeout(() => {
-          container.style.transition = "all 0.6s ease-out";
+          container.style.transition = "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
           container.style.opacity = "1";
           container.style.transform = "translateY(0)";
         }, 100);
       });
 
-      // Simulate real-time updates
+      // Enhanced real-time updates with smooth transitions
       setInterval(() => {
         const totalElement = document.getElementById("total-vehicles");
         const currentValue = parseInt(
-          totalElement.textContent.replace(",", "")
+          totalElement.textContent.replace(/,/g, "")
         );
         const variation = Math.floor(Math.random() * 10) - 5; // ±5 vehicles
         const newValue = Math.max(0, currentValue + variation);
 
-        totalElement.textContent = newValue.toLocaleString();
-      }, 10000); // Update every 10 seconds
+        // Smooth number transition
+        let start = currentValue;
+        let end = newValue;
+        let startTime = Date.now();
+        let duration = 1000;
+
+        function animateCount() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeOut = 1 - Math.pow(1 - progress, 3);
+
+          const current = Math.round(start + (end - start) * easeOut);
+          totalElement.textContent = current.toLocaleString();
+
+          if (progress < 1) {
+            requestAnimationFrame(animateCount);
+          }
+        }
+
+        animateCount();
+      }, 15000); // Update every 15 seconds
 
       // Handle window resize for responsive adjustments
       window.addEventListener("resize", function () {
@@ -430,6 +1860,13 @@
         setTimeout(() => {
           drawChart(chartData[currentFilter]);
         }, 100);
+      });
+
+      // Add subtle parallax effect on scroll
+      window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        const background = document.querySelector(".background");
+        background.style.transform = `translateY(${scrolled * 0.1}px)`;
       });
     </script>
   </body>

@@ -1,3 +1,73 @@
+<?php 
+session_start();
+
+// Handle AJAX request untuk data statistik
+if (isset($_GET['ajax']) && $_GET['ajax'] === 'get_stats') {
+    header('Content-Type: application/json');
+    
+    $host = 'localhost';
+    $user = 'root';
+    $pass = '';
+    $db   = 'db_user';
+    
+    try {
+        $conn = new mysqli($host, $user, $pass, $db);
+        
+        if ($conn->connect_error) {
+            throw new Exception('Connection failed: ' . $conn->connect_error);
+        }
+        
+        $parking = isset($_GET['name']) ? $_GET['name'] : 'Parkiran TULT';
+        $date = date('Y-m-d');
+        
+        $stmt = $conn->prepare("
+            SELECT hour, percentage, count_motor
+            FROM parking_statistics
+            WHERE parking_name = ? AND date = ?
+            ORDER BY hour ASC
+        ");
+        
+        if (!$stmt) {
+            throw new Exception('Prepare statement failed: ' . $conn->error);
+        }
+        
+        $stmt->bind_param("ss", $parking, $date);
+        
+        if (!$stmt->execute()) {
+            throw new Exception('Execute failed: ' . $stmt->error);
+        }
+        
+        $result = $stmt->get_result();
+        $data = [];
+        
+        while ($row = $result->fetch_assoc()) {
+            $h = (int)$row['hour'];
+            $time = str_pad($h, 2, '0', STR_PAD_LEFT) . ':00';
+            $data[] = [
+                'hour'  => $h,
+                'time'  => $time,
+                'value' => (int)$row['percentage'],
+                'count' => (int)$row['count_motor'],
+                'label' => $time
+            ];
+        }
+        
+        $stmt->close();
+        $conn->close();
+        
+        echo json_encode($data);
+        exit;
+        
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode([
+            'error' => true,
+            'message' => $e->getMessage()
+        ]);
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -316,7 +386,7 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        margin-bottom: 20px;
+        margin-bottom: 32px;
         flex-shrink: 0;
       }
 
@@ -327,53 +397,8 @@
       @media (min-width: 768px) {
         .page-title {
           font-size: 30px;
-          margin-bottom: 20px;
+          margin-bottom: 32px;
         }
-      }
-
-      /* Enhanced selected parking indicator */
-      .selected-parking-info {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 24px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-      }
-
-      .selected-parking-info .material-symbols-outlined {
-        color: #10b981;
-        font-size: 24px;
-        animation: pulse 2s infinite;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
-      }
-
-      .selected-parking-text {
-        flex: 1;
-      }
-
-      .selected-parking-name {
-        font-size: 16px;
-        font-weight: 600;
-        color: #fff;
-        margin-bottom: 4px;
-      }
-
-      .selected-parking-status {
-        font-size: 14px;
-        color: #d3b6bdcc;
       }
 
       /* Statistics specific styles */
@@ -706,19 +731,9 @@
         background: #10b981;
       }
 
-      /* Enhanced Parking Gallery */
+      /* Parking Gallery */
       .parking-gallery {
         margin-bottom: 32px;
-      }
-
-      .parking-gallery-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #fff;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
       }
 
       .gallery-scroll {
@@ -755,7 +770,6 @@
         cursor: pointer;
         transition: all 0.3s ease;
         position: relative;
-        border: 3px solid transparent;
       }
 
       @media (min-width: 768px) {
@@ -768,40 +782,6 @@
       .gallery-item:hover {
         transform: scale(1.05);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-      }
-
-      .gallery-item.selected {
-        border: 3px solid #10b981;
-        box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
-      }
-
-      .gallery-item.selected::after {
-        content: "";
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 20px;
-        height: 20px;
-        background: #10b981;
-        border-radius: 50%;
-        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-        z-index: 10;
-      }
-
-      .gallery-item.selected::before {
-        content: "âœ“";
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 12px;
-        font-weight: bold;
-        z-index: 11;
       }
 
       .gallery-item img {
@@ -863,87 +843,6 @@
         background: rgba(239, 68, 68, 0.1);
         border-radius: 8px;
         margin: 20px 0;
-      }
-
-      /* Coming Soon Modal */
-      .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-      }
-
-      .modal-overlay.active {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .modal-content {
-        background: linear-gradient(
-          135deg,
-          #8b1538 0%,
-          #5c0e24 50%,
-          #3d0b18 100%
-        );
-        border-radius: 20px;
-        padding: 40px;
-        text-align: center;
-        max-width: 400px;
-        margin: 20px;
-        transform: scale(0.8);
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .modal-overlay.active .modal-content {
-        transform: scale(1);
-      }
-
-      .modal-icon {
-        font-size: 64px;
-        color: #f59e0b;
-        margin-bottom: 20px;
-      }
-
-      .modal-title {
-        font-size: 24px;
-        font-weight: 700;
-        color: #fff;
-        margin-bottom: 12px;
-      }
-
-      .modal-text {
-        font-size: 16px;
-        color: #d3b6bdcc;
-        margin-bottom: 30px;
-        line-height: 1.5;
-      }
-
-      .modal-button {
-        background: rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 25px;
-        padding: 12px 30px;
-        color: #fff;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .modal-button:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: translateY(-2px);
       }
 
       @media (max-width: 767px) {
@@ -1033,19 +932,6 @@
         .chart-controls {
           display: none;
         }
-
-        .modal-content {
-          margin: 10px;
-          padding: 30px 20px;
-        }
-
-        .modal-title {
-          font-size: 20px;
-        }
-
-        .modal-text {
-          font-size: 14px;
-        }
       }
     </style>
     <div class="background"></div>
@@ -1085,7 +971,11 @@
             class="mobile-logo-img"
           />
         </div>
-        <div class="greeting">Halo, <span class="username">User</span></div>
+        <div class="greeting">
+          Halo, <span class="username">
+            <?php echo isset($_SESSION['nama_lengkap']) ? htmlspecialchars($_SESSION['nama_lengkap']) : 'User'; ?>
+          </span>
+        </div>
 
         <div class="header-right">
           <form class="search-bar" role="search" onsubmit="handleSearch(event)">
@@ -1107,7 +997,7 @@
           </button>
           <img
             class="avatar"
-            src="assets/default.png"
+            src="assets/<?php echo isset($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : 'default.png'; ?>"
             alt="Avatar User"
             onclick="showProfile()"
           />
@@ -1117,35 +1007,24 @@
       <!-- Content Area -->
       <div class="content-area" id="contentArea">
         <h1 class="page-title" id="pageTitle">
-          <span class="material-symbols-outlined">bar_chart_4_bars</span>
-          Statistik Parkiran
+          <span class="material-symbols-outlined">bar_chart_4_bars</span
+          >Statistik Parkiran
         </h1>
-
-        <!-- Selected Parking Info -->
-        <div class="selected-parking-info" id="selected-parking-info">
-          <span class="material-symbols-outlined">location_on</span>
-          <div class="selected-parking-text">
-            <div class="selected-parking-name" id="selected-parking-name">
-              Parkiran TULT
-            </div>
-            <div class="selected-parking-status">Parkiran aktif saat ini</div>
-          </div>
-        </div>
 
         <div class="page-subtitle">
           <div class="status-dot"></div>
-          Statistik hari ini
+          <?php echo date('l, j F Y'); ?>
         </div>
 
         <div id="loading-message" class="loading-message">
           Loading statistik...
         </div>
 
-        <div id="error-message" class="error-message" style="display: none">
+        <div id="error-message" class="error-message" style="display: none;">
           Gagal memuat data. Silakan refresh halaman.
         </div>
 
-        <div class="stats-grid" id="stats-grid" style="display: none">
+        <div class="stats-grid" id="stats-grid" style="display: none;">
           <!-- Progress Card -->
           <div class="stats-card">
             <div class="progress-container">
@@ -1241,39 +1120,23 @@
           </div>
         </div>
 
-        <!-- Enhanced Parking Gallery -->
-        <div class="parking-gallery" id="parking-gallery" style="display: none">
-          <h3 class="parking-gallery-title">
-            <span class="material-symbols-outlined">directions_car</span>
-            Pilih Lokasi Parkiran
-          </h3>
+        <!-- Parking Gallery -->
+        <div class="parking-gallery" id="parking-gallery" style="display: none;">
           <div class="gallery-scroll">
             <div class="gallery-items">
-              <div
-                class="gallery-item selected"
-                data-parking="Parkiran TULT"
-                data-available="true"
-              >
+              <div class="gallery-item">
                 <img src="./assets/parkiran-tult.png" alt="Parkiran 1" />
-                <div class="gallery-overlay">
+                <div class="gallery-overlay" onclick="goToStatistics()">
                   <div class="gallery-text">Parkiran TULT</div>
                 </div>
               </div>
-              <div
-                class="gallery-item"
-                data-parking="Parkiran Asrama"
-                data-available="false"
-              >
+              <div class="gallery-item">
                 <img src="./assets/parkiran-asrama.png" alt="Parkiran 2" />
                 <div class="gallery-overlay">
                   <div class="gallery-text">Parkiran Asrama</div>
                 </div>
               </div>
-              <div
-                class="gallery-item"
-                data-parking="Parkiran Basement"
-                data-available="false"
-              >
+              <div class="gallery-item">
                 <img
                   src="https://images.unsplash.com/photo-1590674899484-d5640e854abe?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
                   alt="Parkiran 3"
@@ -1282,24 +1145,16 @@
                   <div class="gallery-text">Parkiran Basement</div>
                 </div>
               </div>
-              <div
-                class="gallery-item"
-                data-parking="Parkiran Gedung A"
-                data-available="false"
-              >
+              <div class="gallery-item">
                 <img src="./assets/comming-soon-pict.png" alt="Parkiran 4" />
                 <div class="gallery-overlay">
-                  <div class="gallery-text">Parkiran Gedung A</div>
+                  <div class="gallery-text">Coming Soon</div>
                 </div>
               </div>
-              <div
-                class="gallery-item"
-                data-parking="Parkiran Gedung B"
-                data-available="false"
-              >
+              <div class="gallery-item">
                 <img src="./assets/comming-soon-pict.png" alt="Parkiran 5" />
                 <div class="gallery-overlay">
-                  <div class="gallery-text">Parkiran Gedung B</div>
+                  <div class="gallery-text">Coming Soon</div>
                 </div>
               </div>
             </div>
@@ -1307,56 +1162,18 @@
         </div>
 
         <!-- Detail Button -->
-        <div id="detail-button-container" style="display: none">
+        <div id="detail-button-container" style="display: none;">
           <button class="detail-button" onclick="goToDetails()">
-            <span id="detail-button-text">Lihat Detail</span>
+            Lihat Detail
             <span class="material-symbols-outlined">chevron_right</span>
           </button>
         </div>
       </div>
     </main>
 
-    <!-- Coming Soon Modal -->
-    <div class="modal-overlay" id="coming-soon-modal">
-      <div class="modal-content">
-        <div class="modal-icon">
-          <span class="material-symbols-outlined">construction</span>
-        </div>
-        <h2 class="modal-title">Coming Soon!</h2>
-        <p class="modal-text">
-          Parkiran ini sedang dalam tahap pengembangan. Fitur akan tersedia
-          segera. Terima kasih atas kesabaran Anda!
-        </p>
-        <button class="modal-button" onclick="closeModal()">Mengerti</button>
-      </div>
-    </div>
-
     <script>
       // Global variables
       let hourlyData = [];
-      let currentSelectedParking = "Parkiran TULT";
-
-      // Parking data for different locations
-      const parkingData = {
-        "Parkiran TULT": {
-          available: true,
-          data: [
-            { hour: 6, time: "06:00", value: 75, count: 75, label: "06:00" },
-            { hour: 7, time: "07:00", value: 74, count: 74, label: "07:00" },
-            { hour: 8, time: "08:00", value: 73, count: 73, label: "08:00" },
-            { hour: 9, time: "09:00", value: 74, count: 74, label: "09:00" },
-            { hour: 10, time: "10:00", value: 80, count: 80, label: "10:00" },
-            { hour: 11, time: "11:00", value: 85, count: 85, label: "11:00" },
-            { hour: 12, time: "12:00", value: 90, count: 90, label: "12:00" },
-            { hour: 13, time: "13:00", value: 95, count: 95, label: "13:00" },
-            { hour: 14, time: "14:00", value: 92, count: 92, label: "14:00" },
-            { hour: 15, time: "15:00", value: 88, count: 88, label: "15:00" },
-            { hour: 16, time: "16:00", value: 70, count: 70, label: "16:00" },
-            { hour: 17, time: "17:00", value: 50, count: 50, label: "17:00" },
-            { hour: 18, time: "18:00", value: 30, count: 30, label: "18:00" },
-          ],
-        },
-      };
 
       // Navigation functions
       function goToHome() {
@@ -1372,11 +1189,7 @@
       }
 
       function goToDetails() {
-        if (currentSelectedParking === "Parkiran TULT") {
-          window.location.href = "detail_stat.html";
-        } else {
-          showComingSoonModal();
-        }
+        window.location.href = "detail_stat.html";
       }
 
       // Search function
@@ -1385,9 +1198,7 @@
         const searchTerm = document.getElementById("searchInput").value;
         console.log("Searching for:", searchTerm);
         if (searchTerm.trim()) {
-          window.location.href = `search.html?q=${encodeURIComponent(
-            searchTerm
-          )}`;
+          window.location.href = `search.html?q=${encodeURIComponent(searchTerm)}`;
         }
       }
 
@@ -1401,94 +1212,23 @@
         alert("Menampilkan profil user");
       }
 
-      // Modal functions
-      function showComingSoonModal() {
-        const modal = document.getElementById("coming-soon-modal");
-        modal.classList.add("active");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeModal() {
-        const modal = document.getElementById("coming-soon-modal");
-        modal.classList.remove("active");
-        document.body.style.overflow = "auto";
-      }
-
-      // Close modal when clicking outside
-      document
-        .getElementById("coming-soon-modal")
-        .addEventListener("click", function (e) {
-          if (e.target === this) {
-            closeModal();
-          }
-        });
-
-      // Handle parking selection
-      function selectParking(parkingName, isAvailable) {
-        // Update selection visual indicator
-        document.querySelectorAll(".gallery-item").forEach((item) => {
-          item.classList.remove("selected");
-        });
-
-        const selectedItem = document.querySelector(
-          `[data-parking="${parkingName}"]`
-        );
-        if (selectedItem) {
-          selectedItem.classList.add("selected");
-        }
-
-        // Update current selection
-        currentSelectedParking = parkingName;
-
-        // Update selected parking info
-        document.getElementById("selected-parking-name").textContent =
-          parkingName;
-
-        // Update detail button text
-        const detailButton = document.getElementById("detail-button-text");
-        if (isAvailable) {
-          detailButton.textContent = "Lihat Detail";
-        } else {
-          detailButton.textContent = "Coming Soon";
-        }
-
-        if (isAvailable) {
-          // Load data for selected parking (currently only TULT has data)
-          if (parkingData[parkingName]) {
-            updateHourlyStatistics(parkingData[parkingName].data);
-            animateProgress();
-            setTimeout(highlightCurrentHour, 1000);
-          }
-        } else {
-          // Show coming soon modal after a brief delay
-          setTimeout(() => {
-            showComingSoonModal();
-          }, 300);
-        }
-
-        console.log(
-          `Selected parking: ${parkingName}, Available: ${isAvailable}`
-        );
-      }
-
       // Fungsi untuk update data statistik
       function updateHourlyStatistics(data) {
-        console.log("Data received:", data);
-
+        console.log('Data received:', data);
+        
         if (!data || !Array.isArray(data) || data.length === 0) {
-          console.warn("No data received, using dummy data");
+          console.warn('No data received, using dummy data');
           hourlyData = generateDummyData();
         } else {
           hourlyData = data;
         }
-
+        
         // Hide loading, show content
-        document.getElementById("loading-message").style.display = "none";
-        document.getElementById("stats-grid").style.display = "grid";
-        document.getElementById("parking-gallery").style.display = "block";
-        document.getElementById("detail-button-container").style.display =
-          "block";
-
+        document.getElementById('loading-message').style.display = 'none';
+        document.getElementById('stats-grid').style.display = 'grid';
+        document.getElementById('parking-gallery').style.display = 'block';
+        document.getElementById('detail-button-container').style.display = 'block';
+        
         // Generate chart
         generateHourlyChart();
       }
@@ -1496,19 +1236,19 @@
       // Generate dummy data untuk fallback
       function generateDummyData() {
         return [
-          { hour: 6, time: "06:00", value: 75, count: 75, label: "06:00" },
-          { hour: 7, time: "07:00", value: 74, count: 74, label: "07:00" },
-          { hour: 8, time: "08:00", value: 73, count: 73, label: "08:00" },
-          { hour: 9, time: "09:00", value: 74, count: 74, label: "09:00" },
-          { hour: 10, time: "10:00", value: 80, count: 80, label: "10:00" },
-          { hour: 11, time: "11:00", value: 85, count: 85, label: "11:00" },
-          { hour: 12, time: "12:00", value: 90, count: 90, label: "12:00" },
-          { hour: 13, time: "13:00", value: 95, count: 95, label: "13:00" },
-          { hour: 14, time: "14:00", value: 92, count: 92, label: "14:00" },
-          { hour: 15, time: "15:00", value: 88, count: 88, label: "15:00" },
-          { hour: 16, time: "16:00", value: 70, count: 70, label: "16:00" },
-          { hour: 17, time: "17:00", value: 50, count: 50, label: "17:00" },
-          { hour: 18, time: "18:00", value: 30, count: 30, label: "18:00" },
+          { hour: 6, time: '06:00', value: 75, count: 75, label: '06:00' },
+          { hour: 7, time: '07:00', value: 74, count: 74, label: '07:00' },
+          { hour: 8, time: '08:00', value: 73, count: 73, label: '08:00' },
+          { hour: 9, time: '09:00', value: 74, count: 74, label: '09:00' },
+          { hour: 10, time: '10:00', value: 80, count: 80, label: '10:00' },
+          { hour: 11, time: '11:00', value: 85, count: 85, label: '11:00' },
+          { hour: 12, time: '12:00', value: 90, count: 90, label: '12:00' },
+          { hour: 13, time: '13:00', value: 95, count: 95, label: '13:00' },
+          { hour: 14, time: '14:00', value: 92, count: 92, label: '14:00' },
+          { hour: 15, time: '15:00', value: 88, count: 88, label: '15:00' },
+          { hour: 16, time: '16:00', value: 70, count: 70, label: '16:00' },
+          { hour: 17, time: '17:00', value: 50, count: 50, label: '17:00' },
+          { hour: 18, time: '18:00', value: 30, count: 30, label: '18:00' }
         ];
       }
 
@@ -1518,8 +1258,7 @@
         chartBars.innerHTML = "";
 
         if (!hourlyData || hourlyData.length === 0) {
-          chartBars.innerHTML =
-            '<div class="error-message">Tidak ada data untuk ditampilkan</div>';
+          chartBars.innerHTML = '<div class="error-message">Tidak ada data untuk ditampilkan</div>';
           return;
         }
 
@@ -1538,14 +1277,11 @@
           // Color based on occupancy level
           let gradient;
           if (data.value <= 30) {
-            gradient =
-              "linear-gradient(to top, #10b981, #34d399, rgba(255, 255, 255, 0.1))";
+            gradient = "linear-gradient(to top, #10b981, #34d399, rgba(255, 255, 255, 0.1))";
           } else if (data.value <= 70) {
-            gradient =
-              "linear-gradient(to top, #f59e0b, #fbbf24, rgba(255, 255, 255, 0.1))";
+            gradient = "linear-gradient(to top, #f59e0b, #fbbf24, rgba(255, 255, 255, 0.1))";
           } else {
-            gradient =
-              "linear-gradient(to top, #dc2626, #ef4444, rgba(255, 255, 255, 0.1))";
+            gradient = "linear-gradient(to top, #dc2626, #ef4444, rgba(255, 255, 255, 0.1))";
           }
           bar.style.background = gradient;
 
@@ -1623,7 +1359,7 @@
       // Animate circular progress
       function animateProgress() {
         if (!hourlyData || hourlyData.length === 0) return;
-
+        
         const progressFill = document.getElementById("progress-fill");
         const progressValue = document.getElementById("progress-value");
 
@@ -1632,10 +1368,9 @@
         let targetPercentage = 50; // Default
 
         // Find current hour data or closest
-        const currentData =
-          hourlyData.find((d) => d.hour === currentHour) ||
-          hourlyData.find((d) => Math.abs(d.hour - currentHour) <= 1) ||
-          hourlyData[Math.floor(hourlyData.length / 2)]; // Default to middle
+        const currentData = hourlyData.find(d => d.hour === currentHour) ||
+                           hourlyData.find(d => Math.abs(d.hour - currentHour) <= 1) ||
+                           hourlyData[Math.floor(hourlyData.length / 2)]; // Default to middle
 
         if (currentData) {
           targetPercentage = currentData.value;
@@ -1682,132 +1417,129 @@
 
       // Show error message
       function showError(message) {
-        document.getElementById("loading-message").style.display = "none";
-        const errorDiv = document.getElementById("error-message");
+        document.getElementById('loading-message').style.display = 'none';
+        const errorDiv = document.getElementById('error-message');
         errorDiv.textContent = message;
-        errorDiv.style.display = "block";
-
+        errorDiv.style.display = 'block';
+        
         // Use dummy data sebagai fallback
         setTimeout(() => {
           updateHourlyStatistics(generateDummyData());
         }, 2000);
       }
 
-      // Fetch data from database (simulate for demo)
-      async function fetchParkingData(parkingName = "Parkiran TULT") {
+      // Fetch data from database
+      async function fetchParkingData() {
         try {
-          console.log("Fetching parking data for:", parkingName);
-
-          // Simulate API call - in real implementation, you would fetch from your PHP endpoint
-          await new Promise((resolve) => setTimeout(resolve, 500));
-
-          if (parkingData[parkingName] && parkingData[parkingName].available) {
-            return parkingData[parkingName].data;
-          } else {
-            throw new Error("Data not available for this parking location");
+          console.log('Fetching parking data...');
+          
+          const response = await fetch(window.location.href + '?ajax=get_stats&name=Parkiran%20TULT');
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
           }
+
+          const text = await response.text();
+          console.log('Raw response:', text);
+
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch (parseError) {
+            throw new Error('Invalid JSON response: ' + text);
+          }
+
+          if (data.error) {
+            throw new Error(data.message || 'Database error');
+          }
+
+          console.log('Parsed data:', data);
+          return data;
+
         } catch (error) {
-          console.error("Fetch error:", error);
+          console.error('Fetch error:', error);
           throw error;
         }
       }
 
-      // Initialize gallery interactions
-      function initializeGallery() {
-        document.querySelectorAll(".gallery-item").forEach((item) => {
-          item.addEventListener("click", function () {
-            const parkingName = this.getAttribute("data-parking");
-            const isAvailable = this.getAttribute("data-available") === "true";
-
-            // Add click animation
-            this.style.transform = "scale(1.1)";
-            setTimeout(() => {
-              this.style.transform = "scale(1)";
-            }, 200);
-
-            // Handle selection
-            selectParking(parkingName, isAvailable);
-          });
-        });
-      }
-
       // Initialize everything when page loads
       document.addEventListener("DOMContentLoaded", async function () {
-        console.log("Page loaded, initializing...");
-
+        console.log('Page loaded, initializing...');
+        
         try {
-          // Initialize gallery interactions
-          setTimeout(initializeGallery, 100);
-
-          // Load initial data for TULT
-          const data = await fetchParkingData(currentSelectedParking);
+          const data = await fetchParkingData();
           updateHourlyStatistics(data);
           animateProgress();
           initializeChartScroll();
           setTimeout(highlightCurrentHour, 1000);
+          
         } catch (error) {
-          console.error("Failed to load data:", error);
-          showError("Gagal memuat data dari database. Menggunakan data demo.");
+          console.error('Failed to load data:', error);
+          showError('Gagal memuat data dari database. Menggunakan data demo.');
         }
+      });
+
+      // Gallery item interactions
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+          document.querySelectorAll(".gallery-item").forEach((item) => {
+            item.addEventListener("click", function () {
+              const parkingName = this.querySelector(".gallery-text").textContent;
+              console.log(`Selected parking: ${parkingName}`);
+
+              this.style.transform = "scale(1.1)";
+              setTimeout(() => {
+                this.style.transform = "scale(1)";
+              }, 200);
+            });
+          });
+        }, 1000);
       });
 
       // Touch/swipe support for mobile
       let startX = 0;
       let scrollLeft = 0;
 
-      document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
-          document
-            .querySelectorAll(".chart-scroll, .gallery-scroll")
-            .forEach((scrollContainer) => {
-              scrollContainer.addEventListener("touchstart", function (e) {
-                startX = e.touches[0].pageX - this.offsetLeft;
-                scrollLeft = this.scrollLeft;
-              });
-
-              scrollContainer.addEventListener("touchmove", function (e) {
-                e.preventDefault();
-                const x = e.touches[0].pageX - this.offsetLeft;
-                const walk = (x - startX) * 2;
-                this.scrollLeft = scrollLeft - walk;
-              });
+          document.querySelectorAll(".chart-scroll, .gallery-scroll").forEach((scrollContainer) => {
+            scrollContainer.addEventListener("touchstart", function (e) {
+              startX = e.touches[0].pageX - this.offsetLeft;
+              scrollLeft = this.scrollLeft;
             });
+
+            scrollContainer.addEventListener("touchmove", function (e) {
+              e.preventDefault();
+              const x = e.touches[0].pageX - this.offsetLeft;
+              const walk = (x - startX) * 2;
+              this.scrollLeft = scrollLeft - walk;
+            });
+          });
         }, 1000);
       });
 
       // Auto-refresh functionality (optional)
       setInterval(async () => {
         try {
-          if (currentSelectedParking === "Parkiran TULT") {
-            const data = await fetchParkingData(currentSelectedParking);
-            if (data && data.length > 0) {
-              updateHourlyStatistics(data);
-            }
+          const data = await fetchParkingData();
+          if (data && data.length > 0) {
+            updateHourlyStatistics(data);
           }
         } catch (error) {
-          console.log("Auto-refresh failed:", error);
+          console.log('Auto-refresh failed:', error);
         }
       }, 300000); // Refresh every 5 minutes
 
-      // Keyboard support for modal
-      document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape") {
-          closeModal();
-        }
-      });
-
       // Debug function - panggil dari console untuk testing
-      window.debugStats = function () {
-        console.log("Current hourlyData:", hourlyData);
-        console.log("Current selected parking:", currentSelectedParking);
-        fetchParkingData(currentSelectedParking)
-          .then((data) => {
-            console.log("Fresh data from server:", data);
-          })
-          .catch((error) => {
-            console.error("Debug fetch error:", error);
-          });
+      window.debugStats = function() {
+        console.log('Current hourlyData:', hourlyData);
+        fetchParkingData().then(data => {
+          console.log('Fresh data from server:', data);
+        }).catch(error => {
+          console.error('Debug fetch error:', error);
+        });
       };
+
     </script>
   </body>
 </html>

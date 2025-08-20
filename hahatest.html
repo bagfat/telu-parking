@@ -378,12 +378,13 @@
 
       /* Statistics specific styles */
       .page-subtitle {
-        font-size: 14px;
+        font-size: 16px;
         color: #10b981;
         margin-bottom: 32px;
         display: flex;
         align-items: center;
         gap: 8px;
+        font-weight: 600;
       }
 
       .status-dot {
@@ -547,18 +548,18 @@
         transform: none;
       }
 
-      /* Bar Chart */
+      /* Bar Chart - Improved for better visibility */
       .chart-container {
         position: relative;
         background: rgba(255, 255, 255, 0.03);
         border-radius: 16px;
         padding: 20px;
         border: 1px solid rgba(255, 255, 255, 0.05);
+        overflow: hidden;
       }
 
       .chart-wrapper {
         position: relative;
-        overflow: hidden;
         border-radius: 12px;
       }
 
@@ -567,6 +568,7 @@
         scrollbar-width: thin;
         scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
         scroll-behavior: smooth;
+        padding-bottom: 10px;
       }
 
       .chart-scroll::-webkit-scrollbar {
@@ -591,10 +593,10 @@
       .chart-bars {
         display: flex;
         align-items: end;
-        gap: 20px;
-        min-width: 800px;
+        gap: 16px;
+        min-width: max-content;
         height: 220px;
-        padding: 20px;
+        padding: 20px 10px;
         background: linear-gradient(
           to top,
           rgba(255, 255, 255, 0.02),
@@ -607,8 +609,9 @@
         flex-direction: column;
         align-items: center;
         gap: 12px;
-        min-width: 50px;
+        min-width: 60px;
         position: relative;
+        flex-shrink: 0;
       }
 
       .bar-container {
@@ -616,10 +619,12 @@
         height: 180px;
         display: flex;
         align-items: end;
+        width: 100%;
+        justify-content: center;
       }
 
       .bar {
-        width: 24px;
+        width: 28px;
         border-radius: 12px 12px 4px 4px;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
@@ -653,6 +658,7 @@
         opacity: 0;
         transition: opacity 0.3s ease;
         pointer-events: none;
+        white-space: nowrap;
       }
 
       .bar:hover .bar-value {
@@ -664,6 +670,7 @@
         color: #d3b6bdcc;
         font-weight: 600;
         text-align: center;
+        white-space: nowrap;
       }
 
       .bar-time {
@@ -682,12 +689,15 @@
         border-top: 1px solid rgba(255, 255, 255, 0.05);
         font-size: 12px;
         color: #d3b6bd99;
+        flex-wrap: wrap;
+        gap: 8px;
       }
 
       .indicator {
         display: flex;
         align-items: center;
         gap: 6px;
+        white-space: nowrap;
       }
 
       .indicator-dot {
@@ -789,7 +799,7 @@
       }
 
       .gallery-item.selected::before {
-        content: "âœ“";
+        content: "✓";
         position: absolute;
         top: 8px;
         right: 8px;
@@ -1021,13 +1031,17 @@
         }
 
         .chart-bars {
-          min-width: 600px;
-          gap: 15px;
-          padding: 15px;
+          min-width: max-content;
+          gap: 12px;
+          padding: 15px 5px;
+        }
+
+        .bar-item {
+          min-width: 50px;
         }
 
         .bar {
-          width: 20px;
+          width: 24px;
         }
 
         .chart-controls {
@@ -1045,6 +1059,19 @@
 
         .modal-text {
           font-size: 14px;
+        }
+
+        .page-subtitle {
+          font-size: 14px;
+        }
+
+        .chart-indicators {
+          justify-content: center;
+          gap: 12px;
+        }
+
+        .indicator {
+          font-size: 11px;
         }
       }
     </style>
@@ -1132,9 +1159,9 @@
           </div>
         </div>
 
-        <div class="page-subtitle">
+        <div class="page-subtitle" id="page-subtitle">
           <div class="status-dot"></div>
-          Statistik hari ini
+          <span id="current-date">Statistik hari ini</span>
         </div>
 
         <div id="loading-message" class="loading-message">
@@ -1336,6 +1363,29 @@
       let hourlyData = [];
       let currentSelectedParking = "Parkiran TULT";
 
+      // Function to get current date in Indonesian format
+      function getCurrentDateString() {
+        const today = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          timeZone: "Asia/Jakarta",
+        };
+
+        const formatter = new Intl.DateTimeFormat("id-ID", options);
+        return formatter.format(today);
+      }
+
+      // Function to update the date display
+      function updateCurrentDate() {
+        const dateElement = document.getElementById("current-date");
+        if (dateElement) {
+          dateElement.textContent = getCurrentDateString();
+        }
+      }
+
       // Parking data for different locations
       const parkingData = {
         "Parkiran TULT": {
@@ -1512,7 +1562,7 @@
         ];
       }
 
-      // Generate hourly bar chart
+      // Generate hourly bar chart with improved layout
       function generateHourlyChart() {
         const chartBars = document.getElementById("chart-bars");
         chartBars.innerHTML = "";
@@ -1522,6 +1572,16 @@
             '<div class="error-message">Tidak ada data untuk ditampilkan</div>';
           return;
         }
+
+        // Calculate total width needed
+        const barWidth = 28;
+        const barGap = 16;
+        const barPadding = 10;
+        const totalWidth =
+          hourlyData.length * (barWidth + barGap) + barPadding * 2;
+
+        // Set minimum width to ensure all bars are visible
+        chartBars.style.minWidth = `${Math.max(totalWidth, 800)}px`;
 
         hourlyData.forEach((data, index) => {
           const barItem = document.createElement("div");
@@ -1734,6 +1794,9 @@
       // Initialize everything when page loads
       document.addEventListener("DOMContentLoaded", async function () {
         console.log("Page loaded, initializing...");
+
+        // Update current date
+        updateCurrentDate();
 
         try {
           // Initialize gallery interactions
