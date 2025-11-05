@@ -4,12 +4,86 @@ html {
   margin: 0;
   padding: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(180deg, #580a2c 0%, #2b0712 100%);
-  background-attachment: fixed;
   color: #eee;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+}
+
+/* Background Layer 1: Base Gradient */
+/* .background-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #580a2c 0%, #2b0712 100%);
+  z-index: -3;
+} */
+
+/* .background-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+} */
+
+/* .background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+} */
+
+/* Background Layer 2: Image Background */
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("../c_page-login14_HTML_Component/assets/background-top-bar.jpg")
+    no-repeat center center/cover;
+  /* Alternatif path jika yang atas tidak bekerja */
+  /* background: url("c_page-login14_HTML_Component/assets/background-top-bar.jpg") no-repeat center center/cover; */
+  /* background: url("background-top-bar.jpg") no-repeat center center/cover; */
+  /* background: url("assets/background-top-bar.jpg") no-repeat center center/cover; */
+  filter: blur(8px);
+  opacity: 0.8;
+  z-index: -2;
+}
+
+/* Background Layer 3: Overlay untuk efek tambahan */
+/* .background-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(18, 7, 14, 0.3);
+        z-index: -1;
+      } */
+
+/* Fallback jika gambar tidak load */
+.background-image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #580a2c, #2b0712, #1a0408);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.background-image.fallback::before {
+  opacity: 1;
 }
 
 .dashboard-container {
@@ -21,7 +95,13 @@ html {
 /* Sidebar */
 .sidebar {
   width: 80px;
-  background: rgba(18, 7, 14, 0.85);
+  background: linear-gradient(
+    135deg,
+    #8b1538 0%,
+    #5c0e24 30%,
+    #3d0b18 70%,
+    #2d0710 100%
+  );
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   display: flex;
@@ -220,6 +300,23 @@ html {
   transform: scale(1.05);
 }
 
+.background-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    #8b1538 0%,
+    #5c0e24 30%,
+    #3d0b18 70%,
+    #2d0710 100%
+  );
+  filter: blur(8px);
+  z-index: -4;
+}
+
 /* Content Area */
 .content-area {
   flex: 1;
@@ -230,149 +327,186 @@ html {
 @media (min-width: 768px) {
   .content-area {
     padding: 32px;
-    max-width: 800px;
   }
 }
 
-.section-title {
-  font-weight: 700;
+.page-title {
   font-size: 24px;
+  font-weight: 700;
+  color: #fff;
   margin-bottom: 24px;
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #fff;
 }
 
 @media (min-width: 768px) {
-  .section-title {
+  .page-title {
     font-size: 28px;
     margin-bottom: 32px;
   }
 }
 
-.section-icon {
+/* Parking Cards */
+.parking-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .parking-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+  }
+}
+
+.parking-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.parking-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-4px);
+}
+
+.parking-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  position: relative;
+}
+
+.parking-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  padding: 20px;
+  color: white;
+}
+
+.parking-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 768px) {
+  .parking-title {
+    font-size: 20px;
+  }
+}
+
+.parking-info {
+  padding: 16px 20px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.info-label {
+  color: #d3b6bdcc;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-value {
+  color: #fff;
+  font-weight: 600;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-available {
+  background-color: rgb(0, 255, 0);
+}
+
+.status-almost-full {
+  background-color: orange;
+}
+
+.status-full {
+  background-color: red;
+}
+
+.expand-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
   width: 32px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  color: #f0e9e9;
-}
-
-/* Settings groups */
-.settings-group {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  margin-bottom: 16px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  overflow: hidden;
-  transition: all 0.3s ease;
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .settings-group {
-    margin-bottom: 20px;
-    border-radius: 20px;
-  }
-}
-
-.settings-group:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
-}
-
-.settings-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 18px;
-  color: #f0e9e9;
+  color: white;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
 }
 
-@media (min-width: 768px) {
-  .settings-item {
-    padding: 20px 24px;
-  }
+.expand-button:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
 }
 
-.settings-item:last-child {
-  border-bottom: none;
+/* Background Control Panel (untuk testing) */
+.background-controls {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  border-radius: 10px;
+  z-index: 1000;
+  display: none; /* Set ke 'block' untuk menampilkan kontrol */
 }
 
-.settings-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+.background-controls h4 {
+  color: white;
+  margin: 0 0 10px 0;
+  font-size: 14px;
 }
 
-.settings-item:active {
-  transform: scale(0.98);
+.background-controls button {
+  display: block;
+  width: 100%;
+  margin: 5px 0;
+  padding: 5px 10px;
+  background: #580a2c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
 }
 
-.item-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.background-controls button:hover {
+  background: #2b0712;
 }
 
-@media (min-width: 768px) {
-  .item-left {
-    gap: 16px;
-  }
-}
-
-.item-icon {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  flex-shrink: 0;
-}
-
-@media (min-width: 768px) {
-  .item-icon {
-    width: 22px;
-    height: 22px;
-  }
-}
-
-.item-label {
-  font-size: 15px;
-  font-weight: 500;
-}
-
-@media (min-width: 768px) {
-  .item-label {
-    font-size: 16px;
-  }
-}
-
-.arrow-icon {
-  width: 18px;
-  height: 18px;
-  stroke: #d3b6bdaa;
-  stroke-width: 2;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-
-@media (min-width: 768px) {
-  .arrow-icon {
-    width: 20px;
-    height: 20px;
-  }
-}
-
-.settings-item:hover .arrow-icon {
-  stroke: #fff;
-  transform: translateX(2px);
+.background-controls input[type="range"] {
+  width: 100%;
+  margin: 5px 0;
 }
 
 /* Mobile Responsive */
@@ -413,5 +547,11 @@ html {
     order: 3;
     width: 100%;
     margin-top: 12px;
+  }
+
+  .background-controls {
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
   }
 }

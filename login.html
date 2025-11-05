@@ -19,7 +19,7 @@
     <div class="login-container">
       <div class="logo-box">
         <img
-          src="./assets/logo-telu-parking.png"
+          src="./assets/logo-telu-parking-v2.png"
           alt="logo-telu-parking"
           id="logo-telu-parking"
         />
@@ -29,30 +29,19 @@
       <div class="login-box">
         <h1>Tel-U Parking</h1>
         <p>Sistem Monitoring Tempat Parkir<br />Telkom University</p>
-        <form action="login.php" method="POST">
+        <form action="dashboard-mod.html" method="GET">
           <label for="username">Username SSO</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Masukkan username"
-            required
-          />
-
+          <input type="text" id="username" placeholder="Masukkan username" />
           <label for="password">Password</label>
           <div class="password-wrapper">
             <input
               type="password"
               id="password"
-              name="password"
               placeholder="Masukkan password"
-              required
             />
-            <img
-              src="./assets/eye.svg"
-              alt="Tampilkan Password"
-              id="togglePassword"
-            />
+            <span class="material-symbols-outlined" id="togglePassword">
+              visibility
+            </span>
           </div>
           <button type="submit">Masuk</button>
         </form>

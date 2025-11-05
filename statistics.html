@@ -273,7 +273,7 @@
               <div class="gallery-items">
                 <div class="gallery-item">
                   <img src="./assets/parkiran-tult.png" alt="Parkiran 1" />
-                  <div class="gallery-overlay" onclick="goToDetails()">
+                  <div class="gallery-overlay" onclick="goToView()">
                     <div class="gallery-text">Parkiran Tult</div>
                   </div>
                 </div>
@@ -309,7 +309,7 @@
           </div>
 
           <!-- Detail Button -->
-          <button class="detail-button">
+          <button class="detail-button" onclick="goToDetails()">
             Lihat Detail
             <svg
               width="16"
@@ -332,15 +332,19 @@
 
     <script>
       function goToHomePage() {
-        window.location.href = "home-page.html";
+        window.location.href = "dashboard.html";
       }
 
       function goToSettings() {
         window.location.href = "settings.html";
       }
 
+      function goToView() {
+        window.location.href = "view.html";
+      }
+
       function goToDetails() {
-        window.location.href = "view page.html";
+        window.location.href = "details.html";
       }
 
       // Data for hourly chart (6 AM to 6 PM - 12 hours)
