@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pengaturan User</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="settings.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <nav class="sidebar">
+        <div class="sidebar-item" title="Beranda" onclick="goToHomePage()">
+          <svg
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
+          </svg>
+        </div>
+        <div class="sidebar-item" title="Statistik" onclick="goToStatistics()">
+          <svg
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            />
+          </svg>
+        </div>
+        <div class="sidebar-item active" title="Pengaturan">
+          <svg
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main
+        class="main-content"
+        role="main"
+        aria-label="Halaman Pengaturan User"
+      >
+        <!-- Header -->
+        <header class="header">
+          <div class="greeting">
+            Halo, <span class="username">Bagus Fatkhurrohman</span>
+          </div>
+          <div class="header-right" aria-label="Notifikasi dan Profil">
+            <form
+              class="search-bar"
+              role="search"
+              aria-label="Pencarian Pengaturan"
+            >
+              <svg
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                type="search"
+                placeholder="Mau cari apa nih?"
+                aria-label="Kotak pencarian"
+              />
+            </form>
+            <button class="icon-button" aria-label="Notifikasi">
+              <svg
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 01-6 0v-1m6 0H9"
+                />
+              </svg>
+            </button>
+            <img
+              class="avatar"
+              src="./assets/foto-2023-bagus-fatkhurrohman 2.png"
+              alt="Avatar pengguna NamaUser1 dengan latar belakang merah gelap"
+              onerror="this.onerror=null;this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0c0cb72b-b8c3-4a55-9108-bea1f9c2fbf0.png';"
+            />
+          </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+          <div class="section-title" aria-label="Judul Pengaturan">
+            <div class="section-icon" aria-hidden="true">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </div>
+            Pengaturan
+          </div>
+
+          <!-- Bookmark Section -->
+          <section class="settings-group" aria-label="Bookmark">
+            <div
+              class="settings-item"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Bookmark Pengaturan"
+            >
+              <div class="item-left">
+                <svg
+                  class="item-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 5v14l7-7 7 7V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"
+                  />
+                </svg>
+                <span class="item-label">Bookmark</span>
+              </div>
+              <svg
+                class="arrow-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 18l6-6-6-6"
+                />
+              </svg>
+            </div>
+          </section>
+
+          <!-- Notification & Language Section -->
+          <section
+            class="settings-group"
+            aria-label="Notifikasi dan Bahasa"
+            role="region"
+          >
+            <div
+              class="settings-item"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Notification Pengaturan"
+            >
+              <div class="item-left">
+                <svg
+                  class="item-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 01-6 0v-1m6 0H9"
+                  />
+                </svg>
+                <span class="item-label">Notification</span>
+              </div>
+              <svg
+                class="arrow-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 18l6-6-6-6"
+                />
+              </svg>
+            </div>
+            <div
+              class="settings-item"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Language Pengaturan"
+            >
+              <div class="item-left">
+                <svg
+                  class="item-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+                  />
+                </svg>
+                <span class="item-label">Language</span>
+              </div>
+              <svg
+                class="arrow-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 18l6-6-6-6"
+                />
+              </svg>
+            </div>
+          </section>
+
+          <!-- Cache & Cookies Section -->
+          <section
+            class="settings-group"
+            aria-label="Clear Cache dan Cookies"
+            role="region"
+          >
+            <div
+              class="settings-item"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Clear Cache Pengaturan"
+            >
+              <div class="item-left">
+                <svg
+                  class="item-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                <span class="item-label">Clear Cache</span>
+              </div>
+              <svg
+                class="arrow-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 18l6-6-6-6"
+                />
+              </svg>
+            </div>
+            <div
+              class="settings-item"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Clear Cookies Pengaturan"
+            >
+              <div class="item-left">
+                <svg
+                  class="item-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                <span class="item-label">Clear Cookies</span>
+              </div>
+              <svg
+                class="arrow-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 18l6-6-6-6"
+                />
+              </svg>
+            </div>
+          </section>
+
+          <!-- Information Section -->
+          <section
+            class="settings-group"
+            aria-label="Copyright and Privacy Information"
+            role="region"
+          >
+            <div
+              class="settings-item"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Copyright Information"
+            >
+              <div class="item-left">
+                <svg
+                  class="item-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span class="item-label">Copyright Information</span>
+              </div>
+              <svg
+                class="arrow-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 18l6-6-6-6"
+                />
+              </svg>
+            </div>
+            <div
+              class="settings-item"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Privacy Policy"
+            >
+              <div class="item-left">
+                <svg
+                  class="item-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  />
+                </svg>
+                <span class="item-label">Privacy Policy</span>
+              </div>
+              <svg
+                class="arrow-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 18l6-6-6-6"
+                />
+              </svg>
+            </div>
+            <div
+              class="settings-item"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Version Information"
+            >
+              <div class="item-left">
+                <svg
+                  class="item-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m0 0V1a1 1 0 011-1h2a1 1 0 011 1v18a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1h2a1 1 0 011-1z"
+                  />
+                </svg>
+                <span class="item-label">Version Information</span>
+              </div>
+              <svg
+                class="arrow-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 18l6-6-6-6"
+                />
+              </svg>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      function goToHomePage() {
+        window.location.href = "dashboard.html";
+      }
+
+      function goToStatistics() {
+        window.location.href = "statistics.html";
+      }
+      // Simple interactivity for sidebar
+      document.querySelectorAll(".sidebar-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          document
+            .querySelectorAll(".sidebar-item")
+            .forEach((i) => i.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+
+      // Settings item interactions
+      document.querySelectorAll(".settings-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          console.log(
+            "Settings item clicked:",
+            this.querySelector(".item-label").textContent
+          );
+        });
+
+        // Keyboard accessibility
+        item.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            this.click();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

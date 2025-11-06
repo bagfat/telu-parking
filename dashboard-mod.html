@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tel-U Parking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="dashboard-mod.css" />
+
+    <!-- Material Icons - Link yang benar -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+  </head>
+  <body>
+    <div class="background"></div>
+    <div class="sidebar-container">
+      <div class="sidebar-logo" title="Logo TelU">
+        <img
+          src="./assets/logo-telu-parking-v2.png"
+          alt="tel-u-parking-logo"
+          onclick="goToHome()"
+        />
+      </div>
+      <nav class="sidebar">
+        <div class="sidebar-item active" title="Home Page" onclick="goToHome()">
+          <span class="material-symbols-outlined active">cottage</span>
+        </div>
+        <div class="sidebar-item" title="Statistics" onclick="goToStatistics()">
+          <span class="material-symbols-outlined inactive">
+            bar_chart_4_bars
+          </span>
+        </div>
+        <div class="sidebar-item" title="Settings" onclick="goToSettings()">
+          <span class="material-symbols-outlined inactive">settings</span>
+        </div>
+      </nav>
+    </div>
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="mobile-logo">
+          <img
+            src="./assets/logo-telu-parking-v2.png"
+            alt="Tel-U Parking Logo"
+            class="mobile-logo-img"
+          />
+        </div>
+        <div class="greeting">
+          Halo, <span class="username">Bagus Fatkhurrohman</span>
+        </div>
+        <div class="header-right">
+          <form
+            class="search-bar"
+            role="search"
+            onsubmit="handleSearch(event)"
+            #
+          >
+            <span class="material-symbols-outlined">search</span>
+            <input
+              type="search"
+              placeholder="Mau cari apa nih?"
+              id="searchInput"
+            />
+          </form>
+          <button
+            class="icon-button"
+            title="Notifikasi"
+            onclick="showNotifications()"
+          >
+            <span class="material-symbols-outlined" id="notifications-icon">
+              notifications
+            </span>
+          </button>
+          <img
+            class="avatar"
+            src="./assets/avatar-mod.png"
+            alt="Avatar User"
+            onclick="showProfile()"
+          />
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="content-area" id="contentArea">
+        <h1 class="page-title" id="pageTitle">
+          <span class="material-symbols-outlined">cottage</span>Beranda
+        </h1>
+        <div class="parking-grid" id="parkingGrid">
+          <!-- Parking TULT Card -->
+          <div class="parking-card" onclick="goToView()">
+            <div style="position: relative">
+              <img
+                class="parking-image"
+                src="./assets/parkiran-tult.png"
+                alt="Parkiran TULT"
+              />
+            </div>
+            <div class="parking-info">
+              <div class="parking-title">Parkiran TULT</div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-available"></div> -->
+                  Tersedia
+                </div>
+                <div class="info-value available">100/200</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-available"></div> -->
+                  Kapasitas
+                </div>
+                <div class="info-value available">50%</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-available"></div> -->
+                  Status
+                </div>
+                <div class="info-value available">Lapang</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parking Dorm Card -->
+          <div class="parking-card" onclick="goToView()">
+            <div style="position: relative">
+              <img
+                class="parking-image"
+                src="./assets/parkiran-asrama.png"
+                alt="Parkiran Asrama"
+              />
+            </div>
+            <div class="parking-info">
+              <div class="parking-title">Parkiran Asrama</div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-full"></div> -->
+                  Tersedia
+                </div>
+                <div class="info-value full">190/200</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-full"></div> -->
+                  Kapasitas
+                </div>
+                <div class="info-value full">95%</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-full"></div> -->
+                  Status
+                </div>
+                <div class="info-value full">Penuh</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parking Basement Card -->
+          <div class="parking-card" onclick="goToView()">
+            <div style="position: relative">
+              <img
+                class="parking-image"
+                src="https://images.unsplash.com/photo-1590674899484-d5640e854abe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="Parkiran Basement"
+              />
+            </div>
+            <div class="parking-info">
+              <div class="parking-title">Parkiran Basement</div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-almost-full"></div> -->
+                  Tersedia
+                </div>
+                <div class="info-valu almost-full">160/200</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-almost-full"></div> -->
+                  Kapasitas
+                </div>
+                <div class="info-value almost-full">80%</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-almost-full"></div> -->
+                  Status
+                </div>
+                <div class="info-value almost-full">Hampir Penuh</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parking Comming Soon Card -->
+          <div class="parking-card" onclick="goToView()">
+            <div style="position: relative">
+              <img
+                class="parking-image"
+                src="./assets/comming-soon-pict.png"
+                alt="Parkiran ???"
+              />
+            </div>
+            <div class="parking-info">
+              <div class="parking-title">Comming Soon..</div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-almost-full"></div> -->
+                  Tersedia
+                </div>
+                <div class="info-valu">-/-</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-almost-full"></div> -->
+                  Kapasitas
+                </div>
+                <div class="info-value">-%</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-almost-full"></div> -->
+                  Status
+                </div>
+                <div class="info-value">-</div>
+              </div>
+            </div>
+          </div>
+          <div class="parking-card" onclick="goToView()">
+            <div style="position: relative">
+              <img
+                class="parking-image"
+                src="./assets/comming-soon-pict.png"
+                alt="Parkiran ???"
+              />
+            </div>
+            <div class="parking-info">
+              <div class="parking-title">Comming Soon..</div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-almost-full"></div> -->
+                  Tersedia
+                </div>
+                <div class="info-valu">-/-</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-almost-full"></div> -->
+                  Kapasitas
+                </div>
+                <div class="info-value">-%</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">
+                  <!-- <div class="status-indicator status-almost-full"></div> -->
+                  Status
+                </div>
+                <div class="info-value">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      // Fungsi untuk navigasi ke halaman statistik
+      function goToStatistics() {
+        window.location.href = "statistics-mod.html";
+      }
+
+      // Fungsi untuk navigasi ke halaman settings
+      function goToSettings() {
+        window.location.href = "settings-mod.html";
+      }
+
+      // Fungsi untuk navigasi kembali ke home
+      function goToHome() {
+        window.location.href = "dashboard-mod.html"; // sesuaikan dengan nama file home Anda
+      }
+
+      // Fungsi untuk detail parking
+      function goToView() {
+        window.location.href = "view-mod.html";
+      }
+
+      // Fungsi untuk search
+      function handleSearch(event) {
+        event.preventDefault();
+        const searchTerm = document.getElementById("searchInput").value;
+        console.log("Searching for:", searchTerm);
+        // Implementasi search logic di sini
+        if (searchTerm.trim()) {
+          // Contoh: redirect ke halaman search dengan parameter
+          window.location.href = `search.html?q=${encodeURIComponent(
+            searchTerm
+          )}`;
+        }
+      }
+
+      // Fungsi untuk notifikasi
+      function showNotifications() {
+        alert("Menampilkan notifikasi");
+        // Anda bisa ganti dengan modal atau dropdown
+      }
+
+      // Fungsi untuk profile
+      function showProfile() {
+        alert("Menampilkan profil user");
+        // Anda bisa redirect ke halaman profile atau buka modal
+        // window.location.href = 'profile.html';
+      }
+
+      // Optional: Fungsi untuk update active state sidebar
+      function updateSidebarActive(activeIndex) {
+        const sidebarItems = document.querySelectorAll(".sidebar-item");
+        const icons = document.querySelectorAll(
+          ".sidebar-item .material-symbols-outlined"
+        );
+
+        sidebarItems.forEach((item, index) => {
+          if (index === activeIndex) {
+            item.classList.add("active");
+            icons[index].classList.remove("inactive");
+            icons[index].classList.add("active");
+          } else {
+            item.classList.remove("active");
+            icons[index].classList.remove("active");
+            icons[index].classList.add("inactive");
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

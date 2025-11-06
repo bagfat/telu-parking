@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kepadatan Kendaraan - Detail</title>
+    <link rel="stylesheet" href="details.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="greeting" onclick="goBack()">Halo, NamaUser1</div>
+        <div class="header-right">
+          <div class="search-bar">
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="search" placeholder="Mau cari apa nih?" />
+          </div>
+          <button class="notification-btn">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 01-6 0v-1m6 0H9"
+              />
+            </svg>
+          </button>
+          <img
+            class="avatar"
+            src="https://ui-avatars.com/api/?name=User&background=ef4444&color=fff"
+            alt="Avatar"
+          />
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="content-grid">
+          <!-- Page Title -->
+          <div class="page-title fade-in">
+            <div class="title-icon">
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+            </div>
+            <h1>Kepadatan Kendaraan</h1>
+          </div>
+
+          <!-- Time Filter -->
+          <div class="time-filter fade-in">
+            <button class="filter-btn" onclick="setTimeFilter('harian')">
+              harian
+            </button>
+            <button
+              class="filter-btn active"
+              onclick="setTimeFilter('mingguan')"
+            >
+              mingguan
+            </button>
+            <button class="filter-btn" onclick="setTimeFilter('bulanan')">
+              bulanan
+            </button>
+          </div>
+
+          <!-- Dashboard Grid -->
+          <div class="dashboard-grid fade-in">
+            <!-- Chart Section -->
+            <div class="chart-section">
+              <div class="chart-container">
+                <div class="chart-grid">
+                  <div class="grid-line">
+                    <span class="grid-label">300</span>
+                  </div>
+                  <div class="grid-line">
+                    <span class="grid-label">250</span>
+                  </div>
+                  <div class="grid-line">
+                    <span class="grid-label">200</span>
+                  </div>
+                  <div class="grid-line">
+                    <span class="grid-label">150</span>
+                  </div>
+                  <div class="grid-line">
+                    <span class="grid-label">100</span>
+                  </div>
+                  <div class="grid-line">
+                    <span class="grid-label">50</span>
+                  </div>
+                  <div class="grid-line"><span class="grid-label">0</span></div>
+                </div>
+                <div class="chart-line">
+                  <svg class="line-path" viewBox="0 0 300 160">
+                    <path
+                      id="chart-path"
+                      d=""
+                      stroke="#a855f7"
+                      stroke-width="3"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="chart-months">
+                <span class="month-label">Jan</span>
+                <span class="month-label">Feb</span>
+                <span class="month-label">Mar</span>
+                <span class="month-label">Apr</span>
+                <span class="month-label">May</span>
+              </div>
+            </div>
+
+            <!-- Circular Progress -->
+            <div class="stats-circle">
+              <div class="circular-progress">
+                <svg class="progress-ring">
+                  <circle class="progress-ring-bg" cx="50%" cy="50%" r="85" />
+                  <circle
+                    id="progress-main"
+                    class="progress-ring-fill"
+                    cx="50%"
+                    cy="50%"
+                    r="85"
+                    stroke="#3b82f6"
+                    stroke-dasharray="0 535"
+                  />
+                </svg>
+                <div class="progress-center">
+                  <div class="total-count" id="total-vehicles">3423</div>
+                  <div class="total-label">Total Motor</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Grid -->
+          <div class="bottom-grid fade-in">
+            <!-- Statistics List -->
+            <div class="stats-list">
+              <div class="stats-title">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
+                </svg>
+                Statistik Kendaraan
+              </div>
+              <div class="stat-item">
+                <div class="stat-dot dot-blue"></div>
+                <div class="stat-text">Total Kendaraan: 3423</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-dot dot-green"></div>
+                <div class="stat-text">Hari Terbaik: 14 Juni</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-dot dot-yellow"></div>
+                <div class="stat-text">Rata2/Hari: 245</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-dot dot-red"></div>
+                <div class="stat-text">Rata2 Okupansi: 75%</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-dot dot-green"></div>
+                <div class="stat-text">Slot Max: 323</div>
+              </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="system-status">
+              <div class="status-title">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                Status Sistem
+              </div>
+              <div class="status-item">
+                <div class="status-indicator status-active"></div>
+                <div class="status-text">Kamera Aktif: 23 hari</div>
+              </div>
+              <div class="status-item">
+                <div class="status-indicator status-active"></div>
+                <div class="status-text">Waktu Mati: 5 jam</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back Button -->
+      <div class="back-button-container">
+        <button class="back-button" onclick="goBack()">
+          <svg
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          Kembali
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Chart data
+      const chartData = {
+        mingguan: [150, 220, 180, 250, 200, 180, 120],
+        harian: [45, 78, 60, 85, 95, 70, 55],
+        bulanan: [2100, 2350, 2180, 2500, 2200],
+      };
+
+      let currentFilter = "mingguan";
+
+      function drawChart(data) {
+        const svg = document.getElementById("chart-path");
+        const maxValue = Math.max(...data);
+        const width = 300;
+        const height = 160;
+        const padding = 20;
+        const stepX = (width - padding * 2) / (data.length - 1);
+
+        let pathData = "";
+        data.forEach((value, index) => {
+          const x = padding + index * stepX;
+          const y =
+            height - padding - (value / maxValue) * (height - padding * 2);
+
+          if (index === 0) {
+            pathData += `M ${x} ${y}`;
+          } else {
+            pathData += ` L ${x} ${y}`;
+          }
+        });
+
+        svg.setAttribute("d", pathData);
+        svg.style.strokeDasharray = svg.getTotalLength();
+        svg.style.strokeDashoffset = svg.getTotalLength();
+
+        // Animate drawing
+        setTimeout(() => {
+          svg.style.transition = "stroke-dashoffset 2s ease-in-out";
+          svg.style.strokeDashoffset = 0;
+        }, 500);
+      }
+
+      function animateCircularProgress() {
+        const circle = document.getElementById("progress-main");
+        const totalVehicles = document.getElementById("total-vehicles");
+        const circumference = 2 * Math.PI * 85;
+
+        // Simulate 75% occupancy
+        const percentage = 75;
+        const dashArray = (percentage / 100) * circumference;
+
+        let currentCount = 0;
+        const targetCount = 3423;
+        const duration = 2000;
+        const startTime = Date.now();
+
+        function updateProgress() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+
+          // Easing function
+          const easeOut = 1 - Math.pow(1 - progress, 3);
+
+          // Update number
+          currentCount = Math.round(targetCount * easeOut);
+          totalVehicles.textContent = currentCount.toLocaleString();
+
+          // Update circle
+          const currentDash = dashArray * easeOut;
+          circle.style.strokeDasharray = `${currentDash} ${circumference}`;
+
+          if (progress < 1) {
+            requestAnimationFrame(updateProgress);
+          }
+        }
+
+        requestAnimationFrame(updateProgress);
+      }
+
+      function setTimeFilter(filter) {
+        // Update active button
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        event.target.classList.add("active");
+
+        // Update chart
+        currentFilter = filter;
+        drawChart(chartData[filter]);
+
+        // Update months labels based on filter
+        const monthsContainer = document.querySelector(".chart-months");
+        if (filter === "harian") {
+          monthsContainer.innerHTML = `
+                    <span class="month-label">Sen</span>
+                    <span class="month-label">Sel</span>
+                    <span class="month-label">Rab</span>
+                    <span class="month-label">Kam</span>
+                    <span class="month-label">Jum</span>
+                    <span class="month-label">Sab</span>
+                    <span class="month-label">Min</span>
+                `;
+        } else if (filter === "mingguan") {
+          monthsContainer.innerHTML = `
+                    <span class="month-label">W1</span>
+                    <span class="month-label">W2</span>
+                    <span class="month-label">W3</span>
+                    <span class="month-label">W4</span>
+                    <span class="month-label">W5</span>
+                    <span class="month-label">W6</span>
+                    <span class="month-label">W7</span>
+                `;
+        } else {
+          monthsContainer.innerHTML = `
+                    <span class="month-label">Jan</span>
+                    <span class="month-label">Feb</span>
+                    <span class="month-label">Mar</span>
+                    <span class="month-label">Apr</span>
+                    <span class="month-label">May</span>
+                `;
+        }
+      }
+
+      function goBack() {
+        window.location.href = "dashboard.html";
+        // Here you would navigate back to the main statistics page
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add entrance animation delay
+        const elements = document.querySelectorAll(".fade-in");
+        elements.forEach((el, index) => {
+          el.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Initialize chart and progress
+        setTimeout(() => {
+          drawChart(chartData[currentFilter]);
+          animateCircularProgress();
+        }, 800);
+
+        // Add container entrance animation
+        const container = document.querySelector(".container");
+        container.style.opacity = "0";
+        container.style.transform = "translateY(20px)";
+
+        setTimeout(() => {
+          container.style.transition = "all 0.6s ease-out";
+          container.style.opacity = "1";
+          container.style.transform = "translateY(0)";
+        }, 100);
+      });
+
+      // Simulate real-time updates
+      setInterval(() => {
+        const totalElement = document.getElementById("total-vehicles");
+        const currentValue = parseInt(
+          totalElement.textContent.replace(",", "")
+        );
+        const variation = Math.floor(Math.random() * 10) - 5; // ±5 vehicles
+        const newValue = Math.max(0, currentValue + variation);
+
+        totalElement.textContent = newValue.toLocaleString();
+      }, 10000); // Update every 10 seconds
+
+      // Handle window resize for responsive adjustments
+      window.addEventListener("resize", function () {
+        // Redraw chart on resize to maintain proper scaling
+        setTimeout(() => {
+          drawChart(chartData[currentFilter]);
+        }, 100);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tel-U Parking - Statistik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Material Icons - Link yang benar -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="statistics-mod.css" />
+  </head>
+  <body>
+    <div class="background"></div>
+    <div class="sidebar-container">
+      <div class="sidebar-logo" title="Logo TelU">
+        <img
+          src="./assets/logo-telu-parking-v2.png"
+          alt="tel-u-parking-logo"
+          onclick="goToHome()"
+        />
+      </div>
+      <nav class="sidebar">
+        <div class="sidebar-item" title="Home Page" onclick="goToHome()">
+          <span class="material-symbols-outlined inactive">cottage</span>
+        </div>
+        <div
+          class="sidebar-item active"
+          title="Statistics"
+          onclick="goToStatistics()"
+        >
+          <span class="material-symbols-outlined active">
+            bar_chart_4_bars
+          </span>
+        </div>
+        <div class="sidebar-item" title="Settings" onclick="goToSettings()">
+          <span class="material-symbols-outlined inactive">settings</span>
+        </div>
+      </nav>
+    </div>
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="mobile-logo">
+          <img
+            src="./assets/logo-telu-parking-v2.png"
+            alt="Tel-U Parking Logo"
+            class="mobile-logo-img"
+          />
+        </div>
+        <div class="greeting">
+          Halo, <span class="username">Bagus Fatkhurrohman</span>
+        </div>
+        <div class="header-right">
+          <form class="search-bar" role="search" onsubmit="handleSearch(event)">
+            <span class="material-symbols-outlined">search</span>
+            <input
+              type="search"
+              placeholder="Mau cari apa nih?"
+              id="searchInput"
+            />
+          </form>
+          <button
+            class="icon-button"
+            title="Notifikasi"
+            onclick="showNotifications()"
+          >
+            <span class="material-symbols-outlined" id="notifications-icon">
+              notifications
+            </span>
+          </button>
+          <img
+            class="avatar"
+            src="./assets/avatar-mod.png"
+            alt="Avatar User"
+            onclick="showProfile()"
+          />
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="content-area" id="contentArea">
+        <h1 class="page-title" id="pageTitle">
+          <span class="material-symbols-outlined">bar_chart_4_bars</span
+          >Statistik Parkiran
+        </h1>
+
+        <div class="page-subtitle">
+          <div class="status-dot"></div>
+          Senin, 7 Januari 2025
+        </div>
+
+        <div class="stats-grid">
+          <!-- Progress Card -->
+          <div class="stats-card">
+            <div class="progress-container">
+              <div class="circular-progress">
+                <svg class="progress-ring" width="100%" height="100%">
+                  <circle
+                    class="progress-ring-bg"
+                    cx="50%"
+                    cy="50%"
+                    r="70"
+                  ></circle>
+                  <circle
+                    id="progress-fill"
+                    class="progress-ring-fill"
+                    cx="50%"
+                    cy="50%"
+                    r="70"
+                    stroke="url(#gradient)"
+                    stroke-dasharray="0 440"
+                  ></circle>
+                  <defs>
+                    <linearGradient
+                      id="gradient"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop offset="0%" style="stop-color: #10b981" />
+                      <stop offset="100%" style="stop-color: #dc2626" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="progress-text">
+                  <div id="progress-value" class="progress-percentage">0%</div>
+                  <div class="progress-label">Terisi</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart Card -->
+          <div class="stats-card">
+            <div class="chart-section">
+              <div class="chart-header">
+                <div class="chart-title">
+                  <span class="material-symbols-outlined">schedule</span>
+                  Statistik Per Jam (06:00 - 18:00)
+                </div>
+                <div class="chart-controls">
+                  <button
+                    class="scroll-button"
+                    id="scroll-left"
+                    title="Scroll Left"
+                  >
+                    <span class="material-symbols-outlined">chevron_left</span>
+                  </button>
+                  <button
+                    class="scroll-button"
+                    id="scroll-right"
+                    title="Scroll Right"
+                  >
+                    <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="chart-container">
+                <div class="chart-wrapper">
+                  <div class="chart-scroll" id="chart-scroll">
+                    <div class="chart-bars" id="chart-bars">
+                      <!-- Bars will be generated by JavaScript -->
+                    </div>
+                  </div>
+                </div>
+
+                <div class="chart-indicators">
+                  <div class="indicator">
+                    <div class="indicator-dot low-occupancy"></div>
+                    <span>Rendah (0-30%)</span>
+                  </div>
+                  <div class="indicator">
+                    <div class="indicator-dot medium-occupancy"></div>
+                    <span>Sedang (31-70%)</span>
+                  </div>
+                  <div class="indicator">
+                    <div class="indicator-dot high-occupancy"></div>
+                    <span>Tinggi (71-100%)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Parking Gallery -->
+        <div class="parking-gallery">
+          <div class="gallery-scroll">
+            <div class="gallery-items">
+              <div class="gallery-item">
+                <img src="./assets/parkiran-tult.png" alt="Parkiran 1" />
+                <div class="gallery-overlay" onclick="goToDetails()">
+                  <div class="gallery-text">Parkiran TULT</div>
+                </div>
+              </div>
+              <div class="gallery-item">
+                <img src="./assets/parkiran-asrama.png" alt="Parkiran 2" />
+                <div class="gallery-overlay">
+                  <div class="gallery-text">Parkiran Asrama</div>
+                </div>
+              </div>
+              <div class="gallery-item">
+                <img
+                  src="https://images.unsplash.com/photo-1590674899484-d5640e854abe?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                  alt="Parkiran 3"
+                />
+                <div class="gallery-overlay">
+                  <div class="gallery-text">Parkiran Basement</div>
+                </div>
+              </div>
+              <div class="gallery-item">
+                <img src="./assets/comming-soon-pict.png" alt="Parkiran 4" />
+                <div class="gallery-overlay">
+                  <div class="gallery-text">Coming Soon</div>
+                </div>
+              </div>
+              <div class="gallery-item">
+                <img src="./assets/comming-soon-pict.png" alt="Parkiran 5" />
+                <div class="gallery-overlay">
+                  <div class="gallery-text">Coming Soon</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Button -->
+        <button class="detail-button" onclick="goToDetails()">
+          Lihat Detail
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </main>
+
+    <script>
+      // Navigation functions
+      function goToHome() {
+        window.location.href = "dashboard-mod.html";
+      }
+
+      function goToStatistics() {
+        window.location.href = "statistics-mod.html";
+      }
+
+      function goToSettings() {
+        window.location.href = "settings-mod.html";
+      }
+
+      function goToDetails() {
+        window.location.href = "details-mod.html";
+      }
+
+      // Search function
+      function handleSearch(event) {
+        event.preventDefault();
+        const searchTerm = document.getElementById("searchInput").value;
+        console.log("Searching for:", searchTerm);
+        if (searchTerm.trim()) {
+          window.location.href = `search.html?q=${encodeURIComponent(
+            searchTerm
+          )}`;
+        }
+      }
+
+      // Notification function
+      function showNotifications() {
+        alert("Menampilkan notifikasi");
+      }
+
+      // Profile function
+      function showProfile() {
+        alert("Menampilkan profil user");
+      }
+
+      // Data for hourly chart (6 AM to 6 PM - 13 hours)
+      const hourlyData = [
+        { hour: 6, time: "06:00", value: 15, label: "06:00" },
+        { hour: 7, time: "07:00", value: 35, label: "07:00" },
+        { hour: 8, time: "08:00", value: 65, label: "08:00" },
+        { hour: 9, time: "09:00", value: 78, label: "09:00" },
+        { hour: 10, time: "10:00", value: 85, label: "10:00" },
+        { hour: 11, time: "11:00", value: 92, label: "11:00" },
+        { hour: 12, time: "12:00", value: 95, label: "12:00" },
+        { hour: 13, time: "13:00", value: 88, label: "13:00" },
+        { hour: 14, time: "14:00", value: 82, label: "14:00" },
+        { hour: 15, time: "15:00", value: 75, label: "15:00" },
+        { hour: 16, time: "16:00", value: 70, label: "16:00" },
+        { hour: 17, time: "17:00", value: 45, label: "17:00" },
+        { hour: 18, time: "18:00", value: 25, label: "18:00" },
+      ];
+
+      // Generate hourly bar chart
+      function generateHourlyChart() {
+        const chartBars = document.getElementById("chart-bars");
+        chartBars.innerHTML = "";
+
+        hourlyData.forEach((data, index) => {
+          const barItem = document.createElement("div");
+          barItem.className = "bar-item";
+
+          const barContainer = document.createElement("div");
+          barContainer.className = "bar-container";
+
+          const bar = document.createElement("div");
+          bar.className = "bar";
+          bar.style.height = "0px";
+          bar.style.animationDelay = `${index * 0.1}s`;
+
+          // Color based on occupancy level
+          let gradient;
+          if (data.value <= 30) {
+            gradient =
+              "linear-gradient(to top, #10b981, #34d399, rgba(255, 255, 255, 0.1))";
+          } else if (data.value <= 70) {
+            gradient =
+              "linear-gradient(to top, #f59e0b, #fbbf24, rgba(255, 255, 255, 0.1))";
+          } else {
+            gradient =
+              "linear-gradient(to top, #dc2626, #ef4444, rgba(255, 255, 255, 0.1))";
+          }
+          bar.style.background = gradient;
+
+          const barValue = document.createElement("div");
+          barValue.className = "bar-value";
+          barValue.textContent = `${data.value}%`;
+
+          const label = document.createElement("div");
+          label.className = "bar-label";
+          label.textContent = data.label;
+
+          const timeLabel = document.createElement("div");
+          timeLabel.className = "bar-time";
+          timeLabel.textContent = `${data.hour}:00`;
+
+          bar.appendChild(barValue);
+          barContainer.appendChild(bar);
+          barItem.appendChild(barContainer);
+          barItem.appendChild(label);
+          barItem.appendChild(timeLabel);
+          chartBars.appendChild(barItem);
+
+          // Animate bar height
+          setTimeout(() => {
+            bar.style.height = `${Math.max(data.value * 1.8, 10)}px`;
+          }, index * 100 + 500);
+
+          // Add click handler
+          bar.addEventListener("click", () => {
+            console.log(`${data.time}: ${data.value}% occupancy`);
+            bar.style.transform = "scaleY(1.1) scaleX(1.1)";
+            setTimeout(() => {
+              bar.style.transform = "scaleY(1) scaleX(1)";
+            }, 200);
+          });
+        });
+      }
+
+      // Scroll functionality
+      function initializeChartScroll() {
+        const chartScroll = document.getElementById("chart-scroll");
+        const scrollLeftBtn = document.getElementById("scroll-left");
+        const scrollRightBtn = document.getElementById("scroll-right");
+
+        function updateScrollButtons() {
+          const { scrollLeft, scrollWidth, clientWidth } = chartScroll;
+          scrollLeftBtn.disabled = scrollLeft <= 0;
+          scrollRightBtn.disabled = scrollLeft >= scrollWidth - clientWidth - 1;
+        }
+
+        function smoothScroll(direction) {
+          const scrollAmount = 200;
+          const currentScroll = chartScroll.scrollLeft;
+          const targetScroll =
+            direction === "left"
+              ? Math.max(0, currentScroll - scrollAmount)
+              : currentScroll + scrollAmount;
+
+          chartScroll.scrollTo({
+            left: targetScroll,
+            behavior: "smooth",
+          });
+        }
+
+        scrollLeftBtn.addEventListener("click", () => smoothScroll("left"));
+        scrollRightBtn.addEventListener("click", () => smoothScroll("right"));
+
+        chartScroll.addEventListener("scroll", updateScrollButtons);
+
+        // Initial button state
+        setTimeout(updateScrollButtons, 100);
+      }
+
+      // Animate circular progress
+      function animateProgress() {
+        const progressFill = document.getElementById("progress-fill");
+        const progressValue = document.getElementById("progress-value");
+
+        // Calculate average occupancy
+        const currentHour = new Date().getHours();
+        let targetPercentage = 50; // Default
+
+        // Find current hour data or use closest
+        const currentData =
+          hourlyData.find((d) => d.hour === currentHour) ||
+          hourlyData.find((d) => Math.abs(d.hour - currentHour) <= 1) ||
+          hourlyData[6]; // Default to noon
+
+        targetPercentage = currentData.value;
+
+        const circumference = 2 * Math.PI * 70;
+
+        let currentPercentage = 0;
+        const animationDuration = 2000;
+        const startTime = Date.now();
+
+        function updateProgress() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / animationDuration, 1);
+
+          // Easing function
+          const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+
+          currentPercentage = targetPercentage * easeOutCubic;
+          const dashArray = (currentPercentage / 100) * circumference;
+
+          progressFill.style.strokeDasharray = `${dashArray} ${circumference}`;
+          progressValue.textContent = `${Math.round(currentPercentage)}%`;
+
+          if (progress < 1) {
+            requestAnimationFrame(updateProgress);
+          }
+        }
+
+        requestAnimationFrame(updateProgress);
+      }
+
+      // Update active state sidebar
+      function updateSidebarActive(activeIndex) {
+        const sidebarItems = document.querySelectorAll(".sidebar-item");
+        const icons = document.querySelectorAll(
+          ".sidebar-item .material-symbols-outlined"
+        );
+
+        sidebarItems.forEach((item, index) => {
+          if (index === activeIndex) {
+            item.classList.add("active");
+            icons[index].classList.remove("inactive");
+            icons[index].classList.add("active");
+          } else {
+            item.classList.remove("active");
+            icons[index].classList.remove("active");
+            icons[index].classList.add("inactive");
+          }
+        });
+      }
+
+      // Gallery item interactions
+      document.querySelectorAll(".gallery-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          const parkingName = this.querySelector(".gallery-text").textContent;
+          console.log(`Selected parking: ${parkingName}`);
+
+          this.style.transform = "scale(1.1)";
+          setTimeout(() => {
+            this.style.transform = "scale(1)";
+          }, 200);
+        });
+      });
+
+      // Touch/swipe support for mobile
+      let startX = 0;
+      let scrollLeft = 0;
+
+      document
+        .querySelectorAll(".chart-scroll, .gallery-scroll")
+        .forEach((scrollContainer) => {
+          scrollContainer.addEventListener("touchstart", function (e) {
+            startX = e.touches[0].pageX - this.offsetLeft;
+            scrollLeft = this.scrollLeft;
+          });
+
+          scrollContainer.addEventListener("touchmove", function (e) {
+            e.preventDefault();
+            const x = e.touches[0].pageX - this.offsetLeft;
+            const walk = (x - startX) * 2;
+            this.scrollLeft = scrollLeft - walk;
+          });
+        });
+
+      // Highlight current hour
+      function highlightCurrentHour() {
+        const currentHour = new Date().getHours();
+        const bars = document.querySelectorAll(".bar");
+
+        bars.forEach((bar, index) => {
+          const hourData = hourlyData[index];
+          if (hourData && hourData.hour === currentHour) {
+            bar.style.boxShadow = "0 0 20px rgba(255, 255, 255, 0.5)";
+            bar.style.border = "2px solid rgba(255, 255, 255, 0.7)";
+          }
+        });
+      }
+
+      // Initialize everything when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+          animateProgress();
+          generateHourlyChart();
+          initializeChartScroll();
+          highlightCurrentHour();
+        }, 300);
+      });
+
+      // Auto-refresh functionality (simulate real-time updates)
+      setInterval(() => {
+        // Simulate data updates with small random variations
+        const updatedData = hourlyData.map((item) => ({
+          ...item,
+          value: Math.max(
+            0,
+            Math.min(100, item.value + (Math.random() - 0.5) * 10)
+          ),
+        }));
+      }, 30000); // Update every 30 seconds
+    </script>
+  </body>
+</html>
