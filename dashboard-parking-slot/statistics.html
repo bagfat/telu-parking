@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Statistik Parkiran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="statistics.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <nav class="sidebar">
+        <div class="sidebar-item" title="Beranda" onclick="goToHomePage()">
+          <svg
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
+          </svg>
+        </div>
+        <div class="sidebar-item active" title="Statistik">
+          <svg
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            />
+          </svg>
+        </div>
+        <div class="sidebar-item" title="Pengaturan" onclick="goToSettings()">
+          <svg
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+          <div class="greeting">
+            Halo, <span class="username">Bagus Fatkhurrohman</span>
+          </div>
+          <div class="header-right">
+            <form class="search-bar" role="search">
+              <svg
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input type="search" placeholder="Mau cari apa nih?" />
+            </form>
+            <button class="icon-button" title="Notifikasi">
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 01-6 0v-1m6 0H9"
+                />
+              </svg>
+            </button>
+            <img
+              class="avatar"
+              src="./assets/foto-2023-bagus-fatkhurrohman 2.png"
+              alt="Avatar User"
+              onerror="this.onerror=null;this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0c0cb72b-b8c3-4a55-9108-bea1f9c2fbf0.png';"
+            />
+          </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+          <h1 class="page-title">
+            <svg
+              width="28"
+              height="28"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+            Statistik Parkiran
+          </h1>
+
+          <div class="page-subtitle">
+            <div class="status-dot"></div>
+            Senin, 7 Januari 2025
+          </div>
+
+          <!-- Circular Progress -->
+          <div class="progress-container">
+            <div class="circular-progress">
+              <svg class="progress-ring" width="100%" height="100%">
+                <circle
+                  class="progress-ring-bg"
+                  cx="50%"
+                  cy="50%"
+                  r="70"
+                ></circle>
+                <circle
+                  id="progress-fill"
+                  class="progress-ring-fill"
+                  cx="50%"
+                  cy="50%"
+                  r="70"
+                  stroke="url(#gradient)"
+                  stroke-dasharray="0 440"
+                ></circle>
+                <defs>
+                  <linearGradient
+                    id="gradient"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="0%"
+                  >
+                    <stop offset="0%" style="stop-color: #10b981" />
+                    <stop offset="100%" style="stop-color: #dc2626" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="progress-text">
+                <div id="progress-value" class="progress-percentage">0%</div>
+                <div class="progress-label">Terisi</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hourly Chart Section -->
+          <div class="chart-section">
+            <div class="chart-header">
+              <div class="chart-title">
+                <svg
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                Statistik Per Jam (06:00 - 18:00)
+              </div>
+              <div class="chart-controls">
+                <button
+                  class="scroll-button"
+                  id="scroll-left"
+                  title="Scroll Left"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </button>
+                <button
+                  class="scroll-button"
+                  id="scroll-right"
+                  title="Scroll Right"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="chart-container">
+              <div class="chart-wrapper">
+                <div class="chart-scroll" id="chart-scroll">
+                  <div class="chart-bars" id="chart-bars">
+                    <!-- Bars will be generated by JavaScript -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="chart-indicators">
+                <div class="indicator">
+                  <div class="indicator-dot low-occupancy"></div>
+                  <span>Rendah (0-30%)</span>
+                </div>
+                <div class="indicator">
+                  <div class="indicator-dot medium-occupancy"></div>
+                  <span>Sedang (31-70%)</span>
+                </div>
+                <div class="indicator">
+                  <div class="indicator-dot high-occupancy"></div>
+                  <span>Tinggi (71-100%)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parking Gallery -->
+          <div class="parking-gallery">
+            <div class="gallery-scroll">
+              <div class="gallery-items">
+                <div class="gallery-item">
+                  <img src="./assets/parkiran-tult.png" alt="Parkiran 1" />
+                  <div class="gallery-overlay" onclick="goToView()">
+                    <div class="gallery-text">Parkiran Tult</div>
+                  </div>
+                </div>
+                <div class="gallery-item">
+                  <img src="./assets/parkiran-asrama.png" alt="Parkiran 2" />
+                  <div class="gallery-overlay">
+                    <div class="gallery-text">Parkiran Asrama</div>
+                  </div>
+                </div>
+                <div class="gallery-item">
+                  <img
+                    src="https://images.unsplash.com/photo-1590674899484-d5640e854abe?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                    alt="Parkiran 3"
+                  />
+                  <div class="gallery-overlay">
+                    <div class="gallery-text">Parkiran Basement</div>
+                  </div>
+                </div>
+                <div class="gallery-item">
+                  <img src="./assets/logo-telu-praking.png" alt="Parkiran 4" />
+                  <div class="gallery-overlay">
+                    <div class="gallery-text">Parkiran D</div>
+                  </div>
+                </div>
+                <div class="gallery-item">
+                  <img src="./assets/logo-telu-praking.png" alt="Parkiran 5" />
+                  <div class="gallery-overlay">
+                    <div class="gallery-text">Parkiran E</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detail Button -->
+          <button class="detail-button" onclick="goToDetails()">
+            Lihat Detail
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 18l6-6-6-6"
+              />
+            </svg>
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      function goToHomePage() {
+        window.location.href = "dashboard.html";
+      }
+
+      function goToSettings() {
+        window.location.href = "settings.html";
+      }
+
+      function goToView() {
+        window.location.href = "view.html";
+      }
+
+      function goToDetails() {
+        window.location.href = "details.html";
+      }
+
+      // Data for hourly chart (6 AM to 6 PM - 12 hours)
+      const hourlyData = [
+        { hour: 6, time: "06:00", value: 15, label: "06:00" },
+        { hour: 7, time: "07:00", value: 35, label: "07:00" },
+        { hour: 8, time: "08:00", value: 65, label: "08:00" },
+        { hour: 9, time: "09:00", value: 78, label: "09:00" },
+        { hour: 10, time: "10:00", value: 85, label: "10:00" },
+        { hour: 11, time: "11:00", value: 92, label: "11:00" },
+        { hour: 12, time: "12:00", value: 95, label: "12:00" },
+        { hour: 13, time: "13:00", value: 88, label: "13:00" },
+        { hour: 14, time: "14:00", value: 82, label: "14:00" },
+        { hour: 15, time: "15:00", value: 75, label: "15:00" },
+        { hour: 16, time: "16:00", value: 70, label: "16:00" },
+        { hour: 17, time: "17:00", value: 45, label: "17:00" },
+        { hour: 18, time: "18:00", value: 25, label: "18:00" },
+      ];
+
+      // Generate hourly bar chart
+      function generateHourlyChart() {
+        const chartBars = document.getElementById("chart-bars");
+        chartBars.innerHTML = "";
+
+        hourlyData.forEach((data, index) => {
+          const barItem = document.createElement("div");
+          barItem.className = "bar-item";
+
+          const barContainer = document.createElement("div");
+          barContainer.className = "bar-container";
+
+          const bar = document.createElement("div");
+          bar.className = "bar";
+          bar.style.height = "0px";
+          bar.style.animationDelay = `${index * 0.1}s`;
+
+          // Color based on occupancy level
+          let gradient;
+          if (data.value <= 30) {
+            gradient =
+              "linear-gradient(to top, #10b981, #34d399, rgba(255, 255, 255, 0.1))";
+          } else if (data.value <= 70) {
+            gradient =
+              "linear-gradient(to top, #f59e0b, #fbbf24, rgba(255, 255, 255, 0.1))";
+          } else {
+            gradient =
+              "linear-gradient(to top, #dc2626, #ef4444, rgba(255, 255, 255, 0.1))";
+          }
+          bar.style.background = gradient;
+
+          const barValue = document.createElement("div");
+          barValue.className = "bar-value";
+          barValue.textContent = `${data.value}%`;
+
+          const label = document.createElement("div");
+          label.className = "bar-label";
+          label.textContent = data.label;
+
+          const timeLabel = document.createElement("div");
+          timeLabel.className = "bar-time";
+          timeLabel.textContent = `${data.hour}:00`;
+
+          bar.appendChild(barValue);
+          barContainer.appendChild(bar);
+          barItem.appendChild(barContainer);
+          barItem.appendChild(label);
+          barItem.appendChild(timeLabel);
+          chartBars.appendChild(barItem);
+
+          // Animate bar height
+          setTimeout(() => {
+            bar.style.height = `${Math.max(data.value * 1.8, 10)}px`;
+          }, index * 100 + 500);
+
+          // Add click handler
+          bar.addEventListener("click", () => {
+            console.log(`${data.time}: ${data.value}% occupancy`);
+            // Add visual feedback
+            bar.style.transform = "scaleY(1.1) scaleX(1.1)";
+            setTimeout(() => {
+              bar.style.transform = "scaleY(1) scaleX(1)";
+            }, 200);
+          });
+        });
+      }
+
+      // Scroll functionality
+      function initializeChartScroll() {
+        const chartScroll = document.getElementById("chart-scroll");
+        const scrollLeftBtn = document.getElementById("scroll-left");
+        const scrollRightBtn = document.getElementById("scroll-right");
+
+        function updateScrollButtons() {
+          const { scrollLeft, scrollWidth, clientWidth } = chartScroll;
+          scrollLeftBtn.disabled = scrollLeft <= 0;
+          scrollRightBtn.disabled = scrollLeft >= scrollWidth - clientWidth - 1;
+        }
+
+        function smoothScroll(direction) {
+          const scrollAmount = 200;
+          const currentScroll = chartScroll.scrollLeft;
+          const targetScroll =
+            direction === "left"
+              ? Math.max(0, currentScroll - scrollAmount)
+              : currentScroll + scrollAmount;
+
+          chartScroll.scrollTo({
+            left: targetScroll,
+            behavior: "smooth",
+          });
+        }
+
+        scrollLeftBtn.addEventListener("click", () => smoothScroll("left"));
+        scrollRightBtn.addEventListener("click", () => smoothScroll("right"));
+
+        chartScroll.addEventListener("scroll", updateScrollButtons);
+
+        // Initial button state
+        setTimeout(updateScrollButtons, 100);
+      }
+
+      // Animate circular progress
+      function animateProgress() {
+        const progressFill = document.getElementById("progress-fill");
+        const progressValue = document.getElementById("progress-value");
+
+        // Calculate average occupancy
+        const currentHour = new Date().getHours();
+        let targetPercentage = 50; // Default
+
+        // Find current hour data or use closest
+        const currentData =
+          hourlyData.find((d) => d.hour === currentHour) ||
+          hourlyData.find((d) => Math.abs(d.hour - currentHour) <= 1) ||
+          hourlyData[6]; // Default to noon
+
+        targetPercentage = currentData.value;
+
+        const circumference = 2 * Math.PI * 70;
+
+        let currentPercentage = 0;
+        const animationDuration = 2000;
+        const startTime = Date.now();
+
+        function updateProgress() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / animationDuration, 1);
+
+          // Easing function
+          const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+
+          currentPercentage = targetPercentage * easeOutCubic;
+          const dashArray = (currentPercentage / 100) * circumference;
+
+          progressFill.style.strokeDasharray = `${dashArray} ${circumference}`;
+          progressValue.textContent = `${Math.round(currentPercentage)}%`;
+
+          if (progress < 1) {
+            requestAnimationFrame(updateProgress);
+          }
+        }
+
+        requestAnimationFrame(updateProgress);
+      }
+
+      // Sidebar navigation
+      document.querySelectorAll(".sidebar-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          document
+            .querySelectorAll(".sidebar-item")
+            .forEach((i) => i.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+
+      // Gallery item interactions
+      document.querySelectorAll(".gallery-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          const parkingName = this.querySelector(".gallery-text").textContent;
+          console.log(`Selected parking: ${parkingName}`);
+
+          // Add visual feedback
+          this.style.transform = "scale(1.1)";
+          setTimeout(() => {
+            this.style.transform = "scale(1)";
+          }, 200);
+        });
+      });
+
+      // Detail button
+      document
+        .querySelector(".detail-button")
+        .addEventListener("click", function () {
+          console.log("Detail button clicked");
+          this.style.transform = "translateY(-4px)";
+          setTimeout(() => {
+            this.style.transform = "translateY(-2px)";
+          }, 150);
+        });
+
+      // Touch/swipe support for mobile
+      let startX = 0;
+      let scrollLeft = 0;
+
+      document
+        .querySelectorAll(".chart-scroll, .gallery-scroll")
+        .forEach((scrollContainer) => {
+          scrollContainer.addEventListener("touchstart", function (e) {
+            startX = e.touches[0].pageX - this.offsetLeft;
+            scrollLeft = this.scrollLeft;
+          });
+
+          scrollContainer.addEventListener("touchmove", function (e) {
+            e.preventDefault();
+            const x = e.touches[0].pageX - this.offsetLeft;
+            const walk = (x - startX) * 2;
+            this.scrollLeft = scrollLeft - walk;
+          });
+        });
+
+      // Keyboard navigation for accessibility
+      document.addEventListener("keydown", function (e) {
+        const chartScroll = document.querySelector(".chart-scroll");
+        const galleryScroll = document.querySelector(".gallery-scroll");
+
+        if (e.key === "ArrowLeft") {
+          if (e.ctrlKey) {
+            e.preventDefault();
+            chartScroll.scrollLeft -= 100;
+          }
+          if (e.altKey) {
+            e.preventDefault();
+            galleryScroll.scrollLeft -= 100;
+          }
+        } else if (e.key === "ArrowRight") {
+          if (e.ctrlKey) {
+            e.preventDefault();
+            chartScroll.scrollLeft += 100;
+          }
+          if (e.altKey) {
+            e.preventDefault();
+            galleryScroll.scrollLeft += 100;
+          }
+        }
+      });
+
+      // Update statistics function
+      function updateHourlyStatistics(newHourlyData) {
+        if (newHourlyData && newHourlyData.length > 0) {
+          hourlyData.splice(0, hourlyData.length, ...newHourlyData);
+          generateHourlyChart();
+
+          // Update progress based on current hour
+          const currentHour = new Date().getHours();
+          const currentData = hourlyData.find((d) => d.hour === currentHour);
+          if (currentData) {
+            animateProgress();
+          }
+        }
+      }
+
+      // Initialize everything when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+          animateProgress();
+          generateHourlyChart();
+          initializeChartScroll();
+        }, 300);
+      });
+
+      // Auto-refresh functionality (simulate real-time updates)
+      setInterval(() => {
+        // Simulate data updates with small random variations
+        const updatedData = hourlyData.map((item) => ({
+          ...item,
+          value: Math.max(
+            0,
+            Math.min(100, item.value + (Math.random() - 0.5) * 10)
+          ),
+        }));
+
+        // Uncomment to see live updates
+        // updateHourlyStatistics(updatedData);
+      }, 30000); // Update every 30 seconds
+
+      // Highlight current hour
+      function highlightCurrentHour() {
+        const currentHour = new Date().getHours();
+        const bars = document.querySelectorAll(".bar");
+
+        bars.forEach((bar, index) => {
+          const hourData = hourlyData[index];
+          if (hourData && hourData.hour === currentHour) {
+            bar.style.boxShadow = "0 0 20px rgba(255, 255, 255, 0.5)";
+            bar.style.border = "2px solid rgba(255, 255, 255, 0.7)";
+          }
+        });
+      }
+
+      // Call highlight after chart generation
+      setTimeout(highlightCurrentHour, 1000);
+    </script>
+  </body>
+</html>
